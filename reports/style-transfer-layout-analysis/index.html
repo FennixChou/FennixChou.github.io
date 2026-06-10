@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 風格轉換格局偏移 — 自我檢視與修正分析報告</title>
+<style>
+  :root{
+    --bg:#f5f6f8; --card:#ffffff; --ink:#1f2933; --muted:#5b6772; --line:#e3e7ec;
+    --navy:#1e3a5f; --navy2:#2a4d7a; --accent:#2c8c99;
+    --amber-bg:#fff7e6; --red:#c0392b; --red-bg:#fdecea;
+    --green-bg:#e9f6ef; --blue-bg:#e8f1f9;
+    --shadow:0 1px 3px rgba(16,24,40,.06),0 1px 2px rgba(16,24,40,.04);
+    --radius:12px; --maxw:880px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0; background:var(--bg); color:var(--ink);
+    font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+    font-size:16px; line-height:1.75;}
+  main{max-width:var(--maxw); margin:0 auto; padding:18px 16px 80px}
+  .hero{background:linear-gradient(135deg,#1e3a5f,#2a4d7a); color:#fff; border-radius:var(--radius); padding:22px 20px; margin:14px 0 18px; box-shadow:var(--shadow)}
+  .hero h1{margin:0 0 4px; font-size:21px; line-height:1.35}
+  .hero .sub{opacity:.85; font-size:13.5px; margin-bottom:16px}
+  .kpis{display:grid; grid-template-columns:repeat(2,1fr); gap:10px}
+  @media(min-width:720px){.kpis{grid-template-columns:repeat(4,1fr)}}
+  .kpi{background:rgba(255,255,255,.10); border:1px solid rgba(255,255,255,.16); border-radius:10px; padding:10px 12px}
+  .kpi .label{font-size:12px; opacity:.8; margin-bottom:2px}
+  .kpi .val{font-size:16px; font-weight:700; line-height:1.3}
+  section{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:18px 18px 20px; margin:0 0 16px; box-shadow:var(--shadow)}
+  section>h2{margin:0 0 14px; font-size:19px; color:var(--navy); display:flex; gap:10px; line-height:1.35}
+  section>h2 .idx{flex:none; background:var(--navy); color:#fff; font-size:13px; font-weight:700; border-radius:7px; padding:3px 9px; margin-top:2px}
+  h3{font-size:16px; color:var(--navy2); margin:18px 0 8px; border-left:4px solid var(--accent); padding-left:9px}
+  p{margin:8px 0} ul,ol{margin:8px 0; padding-left:22px} li{margin:5px 0}
+  strong{color:#16324f}
+  .muted{color:var(--muted); font-size:13.5px}
+  .table-wrap{overflow-x:auto; margin:10px 0; border:1px solid var(--line); border-radius:10px}
+  table{border-collapse:collapse; width:100%; font-size:14px; min-width:520px}
+  th,td{padding:9px 11px; text-align:left; border-bottom:1px solid var(--line)}
+  thead th{background:#eef2f7; color:var(--navy); font-weight:700}
+  tbody tr:nth-child(even){background:#fafbfc}
+  tbody tr:last-child td{border-bottom:none}
+  .callout{border-radius:10px; padding:11px 14px; margin:11px 0; font-size:14.3px; border:1px solid; line-height:1.7}
+  .callout.warn{background:var(--amber-bg); border-color:#f0d9a8; color:#5d3e06}
+  .callout.note{background:var(--blue-bg); border-color:#cfe1f1; color:#163e5e}
+  .callout.ok{background:var(--green-bg); border-color:#bfe6cf; color:#0f4d30}
+  .callout.danger{background:var(--red-bg); border-color:#f3c2bb; color:#7d2018}
+  .imggrid{display:grid; grid-template-columns:1fr; gap:12px; margin:12px 0}
+  @media(min-width:720px){.imggrid{grid-template-columns:1fr 1fr}}
+  figure{margin:0; background:#fafbfc; border:1px solid var(--line); border-radius:10px; padding:8px}
+  figure img{width:100%; border-radius:8px; display:block}
+  figcaption{font-size:13px; color:var(--muted); padding:6px 4px 2px; text-align:center}
+  .tag-a{display:inline-block;background:var(--red-bg);color:#a5281b;font-weight:700;font-size:12px;border-radius:6px;padding:1px 8px}
+  .tag-b{display:inline-block;background:var(--amber-bg);color:#7a4d04;font-weight:700;font-size:12px;border-radius:6px;padding:1px 8px}
+  .tag-c{display:inline-block;background:var(--green-bg);color:#15663f;font-weight:700;font-size:12px;border-radius:6px;padding:1px 8px}
+  footer{max-width:var(--maxw); margin:0 auto; padding:8px 16px 60px; color:var(--muted); font-size:12.5px; line-height:1.7}
+  .formula{background:#0f1b2d; color:#e7eefc; font-family:Consolas,Menlo,monospace; font-size:13.5px; padding:8px 12px; border-radius:8px; margin:8px 0; overflow-x:auto}
+</style>
+</head>
+<body>
+<main>
+  <div class="hero">
+    <h1>AI 風格轉換「格局偏移」自我檢視與修正分析</h1>
+    <div class="sub">事件：客廳風格轉換示範圖遭使用者指正格局不符 ｜ 分析日期：2026-06-10 ｜ 賈維斯（Claude Code + ComfyUI）</div>
+    <div class="kpis">
+      <div class="kpi"><div class="label">指正內容</div><div class="val">屬實 ✅</div></div>
+      <div class="kpi"><div class="label">發現差異</div><div class="val">7 處（3 處結構級）</div></div>
+      <div class="kpi"><div class="label">根本原因</div><div class="val">3 個參數問題</div></div>
+      <div class="kpi"><div class="label">修正驗證</div><div class="val">已通過 ✅</div></div>
+    </div>
+  </div>
+
+  <section id="s1">
+    <h2><span class="idx">1</span>事件摘要</h2>
+    <p>2026-06-10 製作「客廳風格轉換」示範時，宣稱「窗戶位置沒變、傢俱配置沿用原格局」。使用者比對後指出：<strong>第 3 張（轉換結果）與第 1 張（原始屋況）的場景格局不一致。</strong></p>
+    <div class="callout danger"><strong>自我檢視結論：使用者的指正完全正確。</strong>轉換結果僅保留了「大致的空間關係」（沙發在右、電視在左、吊扇冷氣存在），但多處結構級元素被改變，當時的交付說明過度樂觀，未逐項核對就宣稱格局保留。這是品質檢核流程的疏失，不是模型的鍋。</div>
+  </section>
+
+  <section id="s2">
+    <h2><span class="idx">2</span>四張圖對照</h2>
+    <div class="imggrid">
+      <figure><img src="01_before.png" alt="原始屋況照"><figcaption>① 原始屋況：寬橫窗（含格柵）、右牆實牆、平頂天花、磁磚地</figcaption></figure>
+      <figure><img src="02_styleref.png" alt="風格參考圖"><figcaption>② 風格參考：北歐風，注意它有「雙側大面落地窗＋紗簾」的構圖</figcaption></figure>
+      <figure><img src="03_after_v1.png" alt="第一版轉換結果（格局偏移）"><figcaption>③ 第一版結果：風格成功但格局偏移（問題版）</figcaption></figure>
+      <figure><img src="04_after_fixed.png" alt="修正版轉換結果"><figcaption>④ 修正版結果：窗戶、格柵、傢俱位置全部保留，風格依然轉換成功</figcaption></figure>
+    </div>
+  </section>
+
+  <section id="s3">
+    <h2><span class="idx">3</span>逐項差異比對（① vs ③）</h2>
+    <p>差異分三級：<span class="tag-a">A 結構級</span>＝不該變而變了（牆體開口、空間構造）；<span class="tag-b">B 配置級</span>＝傢俱位置朝向偏移；<span class="tag-c">C 風格級</span>＝風格轉換本來就該變的。</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>#</th><th>項目</th><th>原始圖 ①</th><th>第一版結果 ③</th><th>等級</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>主窗</td><td>後牆寬橫窗＋橫條格柵</td><td>縮小成方格分割窗，格柵消失，窗下多出矮櫃</td><td><span class="tag-a">A</span></td></tr>
+        <tr><td>2</td><td>右側牆</td><td>實牆（沙發靠牆）</td><td>變成整面落地窗＋白紗簾</td><td><span class="tag-a">A</span></td></tr>
+        <tr><td>3</td><td>左側牆</td><td>實牆＋電視櫃</td><td>多出拱形鏡面裝飾與紗簾</td><td><span class="tag-a">A</span></td></tr>
+        <tr><td>4</td><td>沙發</td><td>貼右牆橫放，座面朝左</td><td>位置前移、角度偏轉</td><td><span class="tag-b">B</span></td></tr>
+        <tr><td>5</td><td>電視櫃</td><td>靠左牆</td><td>往中間偏移</td><td><span class="tag-b">B</span></td></tr>
+        <tr><td>6</td><td>天花板</td><td>平頂</td><td>木質貼板（未經要求的造型變更）</td><td><span class="tag-b">B</span></td></tr>
+        <tr><td>7</td><td>地板/牆色/傢俱款式/植栽/光線</td><td>磁磚、泛黃牆、舊傢俱</td><td>木地板、暖白牆、北歐傢俱、暖陽</td><td><span class="tag-c">C ✅</span></td></tr>
+      </tbody>
+    </table></div>
+    <p class="muted">保留正確的項目：吊扇（原位）、冷氣（左上原位）、「沙發右／電視左」的大致關係、單層空間高度。</p>
+  </section>
+
+  <section id="s4">
+    <h2><span class="idx">4</span>根本原因分析</h2>
+    <h3>原因一：用「文生圖」而非「圖生圖」（最關鍵）</h3>
+    <p>第一版 workflow 的 KSampler 從<strong>空白畫布（EmptyLatentImage）以 denoise 1.0 全新生成</strong>。原始照片的像素資訊完全沒有進入生成過程——AI 根本沒「看著原圖畫」，只透過深度圖間接認識這個空間。</p>
+    <h3>原因二：深度圖天生看不見「平面上的東西」</h3>
+    <p>ControlNet 用的是深度圖（DepthAnything V2）。窗戶玻璃、鐵窗格柵、牆面開口在深度圖上<strong>幾乎是平的</strong>——深度圖能鎖住「牆在哪裡」，鎖不住「牆上有什麼」。所以窗型變了、格柵消失了、右牆被開了落地窗。</p>
+    <h3>原因三：風格參考的「構圖基因」滲入了結構層</h3>
+    <p>IPAdapter weight 0.8（linear 模式）偏高。IPAdapter 不只轉移色調材質，也會轉移<strong>構圖特徵</strong>——參考圖②有「雙側大面落地窗＋紗簾」，這個構圖直接滲進結果③的右牆和左牆。再加上 ControlNet strength 只有 0.65 且最後 10% 不約束（end_percent 0.9），結構防線形同虛設。</p>
+  </section>
+
+  <section id="s5">
+    <h2><span class="idx">5</span>修正措施與驗證</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>參數</th><th>第一版（問題版）</th><th>修正版</th><th>作用</th></tr></thead>
+      <tbody>
+        <tr><td>生成模式</td><td>文生圖（空白 latent，denoise 1.0）</td><td><strong>圖生圖（原圖為底，denoise 0.6）</strong></td><td>原圖像素直接參與生成，格局有了「實體地基」</td></tr>
+        <tr><td>ControlNet strength</td><td>0.65</td><td><strong>0.90</strong></td><td>深度結構約束加強</td></tr>
+        <tr><td>ControlNet end_percent</td><td>0.9（最後 10% 放飛）</td><td><strong>1.0（全程約束）</strong></td><td>杜絕收尾階段的結構漂移</td></tr>
+        <tr><td>IPAdapter weight / 模式</td><td>0.8 / linear</td><td><strong>0.7 / style transfer</strong></td><td>只取風格、不取構圖——參考圖的落地窗構圖不再滲入</td></tr>
+      </tbody>
+    </table></div>
+    <h3>修正版驗證結果（圖④）</h3>
+    <ul>
+      <li>✅ 主窗：位置、大小、<strong>橫條格柵</strong>全部保留</li>
+      <li>✅ 右牆：恢復實牆，沙發貼牆、朝向不變</li>
+      <li>✅ 左牆：電視＋矮櫃原位，無多餘裝飾</li>
+      <li>✅ 吊扇、冷氣：原位</li>
+      <li>🎨 風格依然成功轉換：木地板、暖白牆、淺色木框布沙發、自然採光</li>
+    </ul>
+    <div class="callout ok"><strong>結論：</strong>圖生圖模式（denoise 0.6）＋全程強結構約束＋style transfer 模式，是「格局保真」風格轉換的正確配方。第一版的「文生圖＋深度軟約束」配方適合「概念探索」，不適合對客戶宣稱「格局不變」的提案場景。</div>
+  </section>
+
+  <section id="s6">
+    <h2><span class="idx">6</span>流程改進（SOP 修訂）</h2>
+    <ol>
+      <li><strong>雙模式明確分工</strong>：對客戶說「格局不變」→ 一律用修正版配方（img2img）；僅探索風格方向 → 才可用第一版配方，且須註明「構圖僅供參考」</li>
+      <li><strong>出圖後自我檢核清單（交付前必跑）</strong>：窗戶位置/形式 → 門與開口 → 沙發位置朝向 → 主要櫃體 → 天花板/樑位 → 逐項與原圖比對，任一不符即重跑或如實標註</li>
+      <li><strong>誠實標註原則</strong>：檢核未通過就不得宣稱「格局保留」——寧可說「示意圖，構圖有偏移」</li>
+    </ol>
+    <div class="callout note"><strong>這份報告的存在理由：</strong>AI 工作流的品質不靠運氣，靠檢核。這次的疏失是「生成後沒有逐項驗證就下結論」，修訂後的 SOP 把驗證變成交付前的必經步驟。感謝老闆的火眼金睛。</div>
+  </section>
+
+  <footer>
+    本報告由賈維斯（Claude Code）自我檢視產出 ｜ 工具鏈：ComfyUI 0.24.0 + Interior_Scene_XL + ControlNet Depth + IPAdapter Plus ｜ 圖片均為 AI 生成之示範素材，非真實案場。<br>
+    2026-06-10 · fennixchou.github.io
+  </footer>
+</main>
+</body>
+</html>
