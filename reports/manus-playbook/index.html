@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manus Playbook 深度研究 — 小學生也看得懂的完整說明</title>
+<style>
+  :root {
+    --bg: #faf8f4; --card: #ffffff; --ink: #2b2b28; --sub: #6b6b64;
+    --accent: #b8693d; --green: #4a7c59; --red: #a84f43; --yellow: #c9a227;
+    --blue: #4a6b8a; --line: #e6e2d8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: "Noto Sans TC", "Microsoft JhengHei", sans-serif; background: var(--bg); color: var(--ink); line-height: 1.85; }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 24px 18px 80px; }
+  header { text-align: center; padding: 36px 0 24px; border-bottom: 2px solid var(--line); margin-bottom: 28px; }
+  header h1 { font-size: 1.55rem; letter-spacing: .05em; }
+  header .sub { color: var(--sub); font-size: .9rem; margin-top: 8px; }
+  h2 { font-size: 1.2rem; color: var(--accent); margin: 40px 0 14px; padding-left: 12px; border-left: 4px solid var(--accent); }
+  h3 { font-size: 1.02rem; margin: 20px 0 6px; }
+  p { margin: 10px 0; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; margin: 14px 0; }
+  .talk { background: #fdf6ee; border-left: 4px solid var(--yellow); border-radius: 0 10px 10px 0; padding: 14px 18px; margin: 14px 0; }
+  .talk::before { content: "🧒 小學生版解釋："; font-weight: 700; display: block; margin-bottom: 6px; color: var(--accent); }
+  .us { background: #eef4ef; border-left: 4px solid var(--green); border-radius: 0 10px 10px 0; padding: 12px 16px; margin: 12px 0; font-size: .95rem; }
+  .us::before { content: "🏠 跟我們工作的關係"; font-weight: 700; display: block; margin-bottom: 4px; color: var(--green); font-size: .85rem; }
+  .warn { background: #faf0ee; border-left: 4px solid var(--red); border-radius: 0 10px 10px 0; padding: 14px 18px; margin: 14px 0; }
+  table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: .9rem; background: var(--card); }
+  th, td { border: 1px solid var(--line); padding: 8px 11px; text-align: left; vertical-align: top; }
+  th { background: #f1ede4; }
+  ol li, ul li { margin: 6px 0 6px 1.2em; }
+  .num { display: flex; gap: 12px; flex-wrap: wrap; margin: 14px 0; }
+  .num div { flex: 1 1 140px; background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px; text-align: center; }
+  .num b { display: block; font-size: 1.4rem; color: var(--accent); }
+  .num span { font-size: .8rem; color: var(--sub); }
+  code { background: #f1ede4; padding: 2px 6px; border-radius: 5px; font-size: .88em; }
+  .tag { display: inline-block; background: #f1ede4; color: var(--sub); border-radius: 20px; padding: 1px 10px; font-size: .78rem; margin: 2px 4px 2px 0; }
+  footer { margin-top: 56px; padding-top: 18px; border-top: 1px solid var(--line); color: var(--sub); font-size: .8rem; text-align: center; }
+  a { color: var(--accent); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>Manus Playbook 深度研究報告</h1>
+  <div class="sub">小學生也看得懂的完整說明｜資料日期：2026-06-11｜來源：<a href="https://manus.im/zh-tw/playbook">manus.im/zh-tw/playbook</a></div>
+</header>
+
+<h2>一、先認識主角：Manus 是誰？</h2>
+<div class="talk">
+想像你有一位「萬能小幫手機器人」，他不只會聊天——你交代他一件事，他會自己上網查資料、自己整理、自己做出成品（報告、簡報、圖片、影片、網頁）再交給你。這位機器人就叫 <b>Manus</b>，是一個「通用 AI 代理」（AI Agent）：你說目標，他跑完整個過程。
+</div>
+<div class="card">
+<p>Manus 的官方口號是「<b>Less structure, more intelligence</b>」（少一點流程束縛，多一點智慧）。它跟一般聊天 AI 最大的差別：聊天 AI 給你「答案」，Manus 給你「做好的成品」。</p>
+</div>
+
+<h2>二、那 Playbook 是什麼？</h2>
+<div class="talk">
+機器人很聰明，但每次都要從頭交代很麻煩：「幫我做市場研究，要包含這個、那個、還有那個⋯⋯」講不清楚還會做歪。<br><br>
+所以 Manus 出了一本<b>「食譜大全」</b>——這就是 Playbook！每一份 Playbook 就是一張寫好的食譜卡：「市場研究這道菜」該放什麼材料（你要提供的資訊）、幾個步驟、最後端出什麼成品，全部設計好了。你只要挑食譜、填材料、按下去，機器人照著做，成品又快又標準。
+</div>
+<div class="card">
+<p><b>正式定義：</b>Playbook 是 Manus 官方提供的「<b>經過驗證的任務模板與工作流程庫</b>」——由專業人士打造、為成果優化。每個 Playbook 包含：預設好的提示流程、需要你輸入的欄位、固定的輸出格式。目的是把「會用 AI 的人才做得出來的成果」變成「每個人按一下就有」。</p>
+</div>
+<div class="num">
+  <div><b>~80</b><span>個 Playbook 模板</span></div>
+  <div><b>7</b><span>大分類</span></div>
+  <div><b>15</b><span>種語言版本</span></div>
+  <div><b>分鐘級</b><span>產出速度</span></div>
+</div>
+
+<h2>三、七大分類總覽（食譜大全的目錄）</h2>
+
+<h3>📁 1. 精選（Featured）— 5 個招牌菜</h3>
+<div class="card">
+<span class="tag">AI 視頻生成器</span><span class="tag">YouTube 網紅搜尋器</span><span class="tag">AI 投影片生成器</span><span class="tag">市場研究工具</span><span class="tag">PDF 翻譯工具</span>
+<p>官方最推薦、用的人最多的五個。</p>
+</div>
+
+<h3>📁 2. 商業（Business）— 26 個，最大的分類</h3>
+<div class="card">
+<span class="tag">商業計畫書範本</span><span class="tag">AI 預算規劃</span><span class="tag">公司簡報生成器</span><span class="tag">創業概念驗證 POC</span><span class="tag">AI 報告產生器</span><span class="tag">AI 成本分析</span><span class="tag">採購訂單生成器</span><span class="tag">採購管理自動化</span><span class="tag">AI 客戶聯絡人管理</span><span class="tag">AI 求職信生成器</span><span class="tag">商業戰略簡報</span><span class="tag">員工調查生成器</span><span class="tag">GitHub 部署工具</span> ⋯等 26 個
+<p>開公司會用到的文書、分析、規劃幾乎都有：寫計畫書、算預算、做簡報、管採購、管客戶。</p>
+</div>
+
+<h3>📁 3. 創意（Creative）— 11 個</h3>
+<div class="card">
+<span class="tag">AI 室內設計 ⭐</span><span class="tag">AI 頭像生成器</span><span class="tag">草圖轉照片</span><span class="tag">攝影風格分析器</span><span class="tag">AI 動漫生成器</span><span class="tag">AI 故事生成器</span><span class="tag">AI 視頻生成器</span><span class="tag">影片轉 GIF</span> ⋯等 11 個
+<p>畫圖、做影片、變身動漫角色都在這區。<b>注意：這裡有一個「AI 室內設計」</b>——下面第五章詳細講。</p>
+</div>
+
+<h3>📁 4. 銷售和行銷（Sales & Marketing）— 16 個</h3>
+<div class="card">
+<span class="tag">行銷簡報製作</span><span class="tag">銷售漏斗構建器</span><span class="tag">廣告文案生成器</span><span class="tag">AI 銷售報價生成器</span><span class="tag">Reddit 情感分析器</span><span class="tag">YouTube 病毒式內容分析</span><span class="tag">佣金計算器</span><span class="tag">銷售區域映射</span> ⋯等 16 個
+<p>找客戶、寫文案、分析網路聲量、做銷售工具的一區。</p>
+</div>
+
+<h3>📁 5. 教育（Education）— 11 個</h3>
+<div class="card">
+<span class="tag">論文大綱生成器</span><span class="tag">教師專用 PPT 生成器</span><span class="tag">AI 數學解題器</span><span class="tag">AI 作文助手</span><span class="tag">AI 作業助手</span><span class="tag">PDF 翻譯</span><span class="tag">英日/英西/英拉翻譯</span> ⋯等 11 個
+<p>老師備課、學生寫作業、翻譯文件的一區。</p>
+</div>
+
+<h3>📁 6. 個人生產力（Personal Productivity）— 12 個</h3>
+<div class="card">
+<span class="tag">AI 旅行規劃師</span><span class="tag">AI 健身教練</span><span class="tag">萬能計算器</span><span class="tag">AI 優惠券尋找器</span><span class="tag">裝機助手</span><span class="tag">手機/相機/電腦配件比較</span><span class="tag">介紹郵件生成器</span><span class="tag">AI 顏色分析</span> ⋯等 12 個
+<p>生活小幫手：規劃旅行、比較 3C 產品、找優惠券。</p>
+</div>
+
+<h3>📁 7. 其他（Others）— 4 個</h3>
+<div class="card">
+<span class="tag">AI PDF 總結工具</span><span class="tag">AI 文本總結器</span><span class="tag">AI 代碼生成器</span><span class="tag">機會管理工具</span>
+</div>
+
+<h2>四、實際怎麼用？（三步驟，每個 Playbook 都一樣）</h2>
+<div class="card">
+<ol>
+<li><b>挑食譜</b>——在 Playbook 頁面選一個模板，例如「市場研究工具」</li>
+<li><b>填材料</b>——按照它要求的欄位輸入：研究主題、地區、時間範圍</li>
+<li><b>等上菜</b>——Manus 自己上網查、自己分析、幾分鐘後給你完整成品（報告/簡報/圖片/影片），可編輯、可下載</li>
+</ol>
+<p>不需要會寫程式、不需要會下提示詞——這就是 Playbook 的賣點：<b>把「AI 高手的用法」做成按鈕</b>。</p>
+</div>
+
+<h2>五、三個代表性 Playbook 深入看</h2>
+
+<h3>🔍 市場研究工具（Market Research Tool）</h3>
+<div class="card">
+<p><b>做什麼：</b>輸入研究主題＋地理範圍＋時間框架，產出完整市場研究報告：數據分析、消費者行為、競爭環境、商機建議。</p>
+<p><b>官方案例：</b>新加坡戶外冒險市場分析、歐洲數位靈性服務市場解析。</p>
+<p><b>官方賣點：</b>傳統市調要 4-12 週、花 1.5 萬-5 萬美金；它幾分鐘出專業級報告。</p>
+<div class="us">類似瑪莉做的建案市場分析。可以當「第二意見」：瑪莉做完台中某區交屋潮分析後，丟同題目給它跑一份對照，看有沒有漏掉的角度。但在地資料（591、樂居）它不一定抓得到，台灣小區域市場仍是我們自己的資料庫強。</div>
+</div>
+
+<h3>🛋️ AI 室內設計（Interior Design）⭐ 老闆最關心的</h3>
+<div class="card">
+<p><b>做什麼：</b>上傳房間照片＋選風格＋描述需求（例如「更多儲物空間」「更溫暖色調」），產出設計效果圖、材質視覺化、家具配置建議。可以重新設計已布置的房間、布置空房間、把草圖變效果圖。</p>
+<p><b>特殊功能：</b>國際 AI 家具搜尋——效果圖裡的家具能連到 IKEA 等零售商找到類似品。</p>
+<p><b>官方案例：</b>日式無印風（自然木質＋乾淨線條）、中世紀現代風。</p>
+<p><b>適用對象：</b>官方寫的是設計愛好者、不動產業者、一般屋主、專業設計師。</p>
+<div class="us"><b>跟我們 ComfyUI 風格轉換的差別，誠實比較：</b><br>
+① 它是雲端服務、按點數計費；我們 ComfyUI 在本機跑、零成本、不限量<br>
+② 它的「格局保留」能力未知、參數不可控；我們有 v2 配方＋五項格局檢核，品質自己把關<br>
+③ 它贏在「家具搜尋連購買連結」這招——客戶看到效果圖直接找得到類似家具，這是我們目前沒有的<br>
+<b>結論：給客戶的正式示意圖繼續用 ComfyUI；Manus 這個可以當「快速草案」或觀摩它的家具連結玩法。</b></div>
+</div>
+
+<h3>📊 AI 投影片生成器（Slide Generator）</h3>
+<div class="card">
+<p><b>做什麼：</b>輸入一句主題（例如「2025 年第二季銷售報告」），AI 自己研究、找重點、排版，產出可編輯簡報，匯出 PowerPoint / Google Slides / PDF。</p>
+<p><b>三步流程：</b>提供主題 → AI 研究＋構建 → 拿到可編輯成品。</p>
+<div class="us">跟 Open Design 的簡報功能重疊。差別：Manus 是「全自動含研究」（它幫你查資料），Open Design 是「你給內容、它管設計品質」。BNI 短講這種需要快速成形的，Manus 型工具快；客戶提案這種要品牌一致的，DESIGN.md 路線穩。</div>
+</div>
+
+<h2>六、應用場景整理（什麼人、什麼時候用）</h2>
+<table>
+<tr><th>場景</th><th>用哪些 Playbook</th><th>白話例子</th></tr>
+<tr><td>創業開店</td><td>商業計畫書、POC、預算規劃、成本分析</td><td>「我想開咖啡店」→ 計畫書＋預算表一條龍</td></tr>
+<tr><td>行銷接案</td><td>市場研究、廣告文案、銷售漏斗、網紅搜尋</td><td>找 YouTube 合作對象＋寫投放文案</td></tr>
+<tr><td>日常文書</td><td>報告產生器、PDF 總結、翻譯、簡報生成</td><td>50 頁英文 PDF → 中文摘要＋簡報</td></tr>
+<tr><td>創意產出</td><td>視頻生成、室內設計、草圖轉照片、頭像</td><td>手繪草圖 → 擬真效果圖</td></tr>
+<tr><td>教學備課</td><td>教師 PPT、數學解題、作文助手</td><td>課程大綱 → 整套教學簡報</td></tr>
+<tr><td>個人生活</td><td>旅行規劃、健身教練、3C 比較</td><td>「東京五天親子遊」→ 完整行程表</td></tr>
+</table>
+
+<h2>七、Manus Playbook vs 我們現有工具</h2>
+<table>
+<tr><th>比較項</th><th>Manus Playbook</th><th>我們的系統（賈維斯＋ComfyUI＋資料庫）</th></tr>
+<tr><td>型態</td><td>雲端服務，按點數付費</td><td>本機運行，已付的訂閱費內吃到飽</td></tr>
+<tr><td>上手難度</td><td>零門檻，按按鈕</td><td>需要我（賈維斯）當操作員</td></tr>
+<tr><td>客製深度</td><td>模板固定，改不了流程</td><td>工作流全可改（v2 配方、檢核清單都是自己定的）</td></tr>
+<tr><td>在地資料</td><td>台灣建案/法規/行情弱</td><td>三大資料庫＋591 追蹤，在地是我們的主場</td></tr>
+<tr><td>資料隱私</td><td>內容上雲端</td><td>客戶資料留在本機</td></tr>
+<tr><td>強項</td><td>速度、零門檻、家具搜尋等成熟功能</td><td>品質可控、累積知識、客製化</td></tr>
+</table>
+<div class="card">
+<p><b>一句話定位：</b>Manus Playbook 像「連鎖快餐的中央廚房」——快、標準、不用學；我們的系統像「自家餐廳的廚房」——慢一點點，但菜單自己定、口味自己調、客人資料不外流。<b>值得學的是它的「食譜化」思維：把重複任務寫成固定模板</b>——這正是我們已經在做的事（風格轉換 SOP、報價資料庫、講稿模板）。</p>
+</div>
+
+<div class="warn">
+<b>注意事項：</b><br>
+① Manus 為付費服務（點數制），高頻使用成本會累積；<br>
+② 產出內容需要人工查核——它的市場數據來源不透明，引用前要驗證（我們的鐵則：數字必須可追溯）；<br>
+③ 上傳客戶房屋照片到雲端服務前，留意個資與隱私（我們的規矩：客戶資料不亂上雲）。
+</div>
+
+<h2>八、總複習（一分鐘版）</h2>
+<div class="talk">
+<b>Manus</b> = 會自己完成任務的萬能機器人。<b>Playbook</b> = 給機器人的食譜大全：約 80 張食譜卡、7 大分類，挑食譜 → 填材料 → 等上菜，幾分鐘拿成品。最大價值是「零門檻」——不會用 AI 的人也能拿到 AI 高手等級的成果。對我們來說：室內設計效果圖繼續用自家 ComfyUI（品質可控、零成本），但它的「模板化思維」和「家具搜尋連結」值得偷學。🔔 下課！
+</div>
+
+<footer>
+本報告由賈維斯彙整自 manus.im 公開頁面（2026-06-11）｜功能與數量以官方頁面當日內容為準｜僅供內部研究參考，非官方文件
+</footer>
+</div>
+</body>
+</html>
