@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>如菓 AI 室內設計 Playbook</title>
+<style>
+  :root{
+    --bg:#faf8f4;--card:#fff;--ink:#2b2b28;--sub:#6b6b64;--accent:#b8693d;
+    --green:#4a7c59;--line:#e6e2d8;--chip:#f1ede4;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Noto Sans TC","Microsoft JhengHei",sans-serif;background:var(--bg);color:var(--ink);line-height:1.7}
+  .wrap{max-width:760px;margin:0 auto;padding:22px 16px 70px}
+  header{text-align:center;padding:26px 0 18px;border-bottom:2px solid var(--line);margin-bottom:22px}
+  header h1{font-size:1.4rem;letter-spacing:.04em}
+  header .sub{color:var(--sub);font-size:.85rem;margin-top:6px}
+  h2{font-size:1rem;color:var(--accent);margin:24px 0 10px;padding-left:10px;border-left:4px solid var(--accent)}
+  .step{font-size:.72rem;color:#fff;background:var(--accent);border-radius:20px;padding:1px 9px;margin-right:6px}
+  label{display:block;font-size:.85rem;color:var(--sub);margin:12px 0 4px}
+  input[type=text],textarea,select{width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:8px;font-family:inherit;font-size:.92rem;background:#fff;color:var(--ink)}
+  textarea{min-height:64px;resize:vertical}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:12px 0}
+  .chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:6px}
+  .chip{border:1px solid var(--line);background:var(--chip);border-radius:20px;padding:5px 13px;font-size:.85rem;cursor:pointer;user-select:none;transition:.15s}
+  .chip:hover{border-color:var(--accent)}
+  .chip.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .radio-row{display:flex;gap:10px;margin-top:6px;flex-wrap:wrap}
+  .radio-row .chip.on{background:var(--green);border-color:var(--green)}
+  .btn{display:block;width:100%;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:13px;font-size:1rem;font-weight:700;cursor:pointer;margin-top:18px}
+  .btn:hover{filter:brightness(1.06)}
+  .out{display:none;margin-top:8px}
+  .out.show{display:block}
+  pre{background:#0f1115;color:#e8e6e1;border-radius:8px;padding:13px;overflow-x:auto;font-size:.8rem;white-space:pre-wrap;word-break:break-word;margin:6px 0}
+  .copy{background:var(--chip);border:1px solid var(--line);border-radius:7px;padding:5px 12px;font-size:.8rem;cursor:pointer;float:right}
+  .note{background:#fdf6ee;border-left:4px solid #d9b24a;border-radius:0 8px 8px 0;padding:11px 14px;margin:10px 0;font-size:.85rem}
+  .check{background:#eef4ef;border-left:4px solid var(--green);border-radius:0 8px 8px 0;padding:11px 14px;margin:10px 0;font-size:.85rem}
+  .check b{color:var(--green)}
+  small{color:var(--sub)}
+  footer{margin-top:36px;padding-top:14px;border-top:1px solid var(--line);color:var(--sub);font-size:.74rem;text-align:center}
+  .field-k{display:inline-block;background:var(--chip);border-radius:5px;padding:1px 7px;font-size:.78rem;color:var(--sub);margin-right:4px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>🛋️ 如菓 AI 室內設計 Playbook</h1>
+  <div class="sub">輸入需求 → 產生 ComfyUI 設計指令卡 → 交給賈維斯出圖｜本機零成本</div>
+</header>
+
+<h2><span class="step">1</span>案場資訊</h2>
+<div class="card">
+  <label>案場/客戶名稱（選填，方便存檔命名）</label>
+  <input type="text" id="proj" placeholder="例：清水透天 3F 主臥">
+  <label>空間類型</label>
+  <select id="room">
+    <option value="living room">客廳</option>
+    <option value="bedroom">臥室</option>
+    <option value="kitchen">廚房</option>
+    <option value="dining room">餐廳</option>
+    <option value="bathroom">衛浴</option>
+    <option value="study room / home office">書房/工作室</option>
+    <option value="children's room">兒童房</option>
+    <option value="open-plan living and dining area">開放式客餐廳</option>
+  </select>
+  <label>坪數（選填，幫助生成合理比例）</label>
+  <input type="text" id="ping" placeholder="例：8 坪">
+</div>
+
+<h2><span class="step">2</span>設計風格（單選）</h2>
+<div class="card">
+  <div class="chips" id="styles"></div>
+</div>
+
+<h2><span class="step">3</span>需求重點（可複選）</h2>
+<div class="card">
+  <div class="chips" id="needs"></div>
+  <label>其他特殊需求（自由填寫）</label>
+  <textarea id="custom" placeholder="例：要有一面書牆、留嬰兒車停放空間、避免深色"></textarea>
+</div>
+
+<h2><span class="step">4</span>生成模式（關鍵選擇）</h2>
+<div class="card">
+  <div class="radio-row" id="mode">
+    <span class="chip on" data-v="keep">保留原格局（換風格）</span>
+    <span class="chip" data-v="redesign">空間重設計（可大改）</span>
+  </div>
+  <div class="note" id="modenote">
+    <b>保留原格局</b>：自動套用 v2 工法（img2img），鎖住牆面/窗/門位置只換風格——適合給客戶看「你家裝修後的樣子」。交付前賈維斯會跑五項格局檢核。
+  </div>
+</div>
+
+<button class="btn" onclick="gen()">⚡ 產生設計指令卡</button>
+
+<div class="out" id="out">
+  <h2>📋 設計指令卡（複製給賈維斯）</h2>
+  <div class="card">
+    <button class="copy" onclick="cp('card')">複製全部</button>
+    <div style="clear:both"></div>
+    <pre id="card"></pre>
+  </div>
+
+  <h2>🎨 ComfyUI 正向 Prompt</h2>
+  <div class="card">
+    <button class="copy" onclick="cp('pos')">複製</button>
+    <div style="clear:both"></div>
+    <pre id="pos"></pre>
+  </div>
+
+  <h2>🚫 負向 Prompt</h2>
+  <div class="card">
+    <button class="copy" onclick="cp('neg')">複製</button>
+    <div style="clear:both"></div>
+    <pre id="neg"></pre>
+  </div>
+
+  <div class="check" id="checkbox"></div>
+  <div class="note">
+    使用方式：把上面「設計指令卡」整段貼到 Discord 給賈維斯，他會用 ComfyUI 出圖並回傳。保留格局模式需附上原始房間照片。
+  </div>
+</div>
+
+<footer>如菓室內裝修 · AI 室內設計 Playbook v1 · 逆向 Manus playbook 自製 · 2026-06-11<br>引擎：本機 ComfyUI（Interior_Scene_XL）+ 賈維斯 · 不上雲、零點數</footer>
+</div>
+
+<script>
+const STYLES=[
+ ["北歐風","Scandinavian, light oak, white walls, cozy minimalism, natural linen"],
+ ["日式無印","Japanese muji, natural wood, clean lines, serene minimalism, paper screens"],
+ ["現代簡約","modern minimalist, neutral palette, clean geometry, uncluttered"],
+ ["侘寂 Wabi-sabi","wabi-sabi, raw textured plaster, earthy tones, imperfect natural materials"],
+ ["輕奢","light luxury, marble accents, brass details, velvet, soft elegant lighting"],
+ ["工業風","industrial loft, exposed brick, black metal, concrete, Edison bulbs"],
+ ["美式鄉村","American farmhouse, warm wood, shaker cabinets, cozy traditional"],
+ ["中世紀現代","mid-century modern, walnut, retro elegant furniture, warm tones"],
+ ["奶油風","cream style, soft beige, rounded furniture, warm cozy gentle light"],
+ ["新中式","modern Chinese style, dark wood, ink-wash mood, refined oriental"],
+];
+const NEEDS=[
+ ["更多收納","ample storage, built-in cabinets"],
+ ["暖色調","warm color tones, cozy ambiance"],
+ ["冷色調","cool color tones, calm ambiance"],
+ ["大採光","large windows, abundant natural daylight"],
+ ["明亮通透","bright and airy, open feeling"],
+ ["小宅放大","space-enhancing layout, visually enlarged"],
+ ["親子友善","child-friendly, safe rounded edges"],
+ ["電視牆","feature TV wall"],
+ ["中島","kitchen island"],
+ ["閱讀角","reading nook"],
+ ["植栽綠意","indoor plants, greenery"],
+ ["間接照明","indirect cove lighting, layered lighting"],
+];
+let curStyle=0, curMode="keep";
+const sd=document.getElementById('styles');
+STYLES.forEach((s,i)=>{const c=document.createElement('span');c.className='chip'+(i==0?' on':'');c.textContent=s[0];c.onclick=()=>{curStyle=i;[...sd.children].forEach(x=>x.classList.remove('on'));c.classList.add('on')};sd.appendChild(c)});
+const nd=document.getElementById('needs');
+NEEDS.forEach((n,i)=>{const c=document.createElement('span');c.className='chip';c.dataset.i=i;c.textContent=n[0];c.onclick=()=>c.classList.toggle('on');nd.appendChild(c)});
+const md=document.getElementById('mode');
+[...md.children].forEach(c=>c.onclick=()=>{curMode=c.dataset.v;[...md.children].forEach(x=>x.classList.remove('on'));c.classList.add('on');
+ document.getElementById('modenote').innerHTML=curMode=='keep'
+  ?'<b>保留原格局</b>：自動套用 v2 工法（img2img），鎖住牆面/窗/門位置只換風格——適合給客戶看「你家裝修後的樣子」。交付前賈維斯會跑五項格局檢核。'
+  :'<b>空間重設計</b>：文生圖模式，可自由重排格局與家具，適合提案發想階段探索可能性。不保證與現況一致。';
+});
+
+function gen(){
+ const proj=document.getElementById('proj').value||'(未命名案場)';
+ const room=document.getElementById('room').value;
+ const roomTw=document.getElementById('room').selectedOptions[0].text;
+ const ping=document.getElementById('ping').value;
+ const st=STYLES[curStyle];
+ const needSel=[...nd.children].filter(c=>c.classList.contains('on')).map(c=>NEEDS[c.dataset.i]);
+ const custom=document.getElementById('custom').value.trim();
+
+ const pos=[`interior design of a ${room}`,st[1],...needSel.map(n=>n[1]),
+   ping?`approx ${ping}`:'',custom,
+   'photorealistic, professional architectural photography, soft natural light, 8k, highly detailed, realistic materials']
+   .filter(Boolean).join(', ');
+ const neg='lowres, blurry, distorted perspective, warped walls, extra windows, deformed furniture, cluttered, watermark, text, cartoon, unrealistic proportions';
+
+ const wf=curMode=='keep'
+  ? 'interior_style_transfer_SDXL_v2.json（img2img denoise 0.6 + ControlNet 0.9 全程 + IPAdapter style transfer 0.7）'
+  : 'interior_text2img_SDXL.json（文生圖，可自由重排格局）';
+
+ const card=
+`【如菓 AI 室內設計指令卡】
+案場：${proj}
+空間：${roomTw}${ping?' / '+ping:''}
+風格：${st[0]}
+需求：${needSel.map(n=>n[0]).join('、')||'（無）'}
+特殊：${custom||'（無）'}
+模式：${curMode=='keep'?'保留原格局（v2 img2img）':'空間重設計（文生圖）'}
+建議 workflow：${wf}
+${curMode=='keep'?'※ 附原始房間照片，交付前須通過五項格局檢核':'※ 提案探索用，不保證與現況一致'}
+
+賈維斯：請依上述用 ComfyUI 出圖。`;
+
+ document.getElementById('card').textContent=card;
+ document.getElementById('pos').textContent=pos;
+ document.getElementById('neg').textContent=neg;
+ document.getElementById('checkbox').innerHTML=curMode=='keep'
+  ?'<b>✅ 交付前五項格局檢核（賈維斯執行）：</b><br>① 窗戶位置/形式　② 門與開口　③ 沙發位置朝向　④ 主要櫃體　⑤ 天花板/樑位 —— 逐項對照原圖，任一不符即重跑或標註'
+  :'<b>💡 提案探索模式：</b>此模式可自由發想，輸出為概念示意，交付客戶時請註明「示意參考，實際以設計圖為準」';
+ document.getElementById('out').classList.add('show');
+ document.getElementById('out').scrollIntoView({behavior:'smooth'});
+}
+function cp(id){const t=document.getElementById(id).textContent;navigator.clipboard.writeText(t);event.target.textContent='已複製✓';setTimeout(()=>event.target.textContent=id=='card'?'複製全部':'複製',1200)}
+</script>
+</body>
+</html>
