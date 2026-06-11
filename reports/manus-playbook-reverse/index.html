@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manus Playbook 逆向工程解構報告</title>
+<style>
+  :root {
+    --bg: #0f1115; --card: #1a1d24; --ink: #e8e6e1; --sub: #9a978f;
+    --accent: #e0915a; --green: #6bbf8a; --red: #d96a5c; --yellow: #d9b24a;
+    --blue: #6a9bd1; --line: #2c2f38;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: "Noto Sans TC", "Microsoft JhengHei", sans-serif; background: var(--bg); color: var(--ink); line-height: 1.85; }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 24px 18px 80px; }
+  header { text-align: center; padding: 40px 0 26px; border-bottom: 1px solid var(--line); margin-bottom: 28px; }
+  header h1 { font-size: 1.6rem; letter-spacing: .04em; color: var(--accent); }
+  header .sub { color: var(--sub); font-size: .88rem; margin-top: 10px; }
+  .badge { display: inline-block; background: var(--card); border: 1px solid var(--line); color: var(--sub); border-radius: 6px; padding: 3px 10px; font-size: .76rem; margin: 4px 3px 0; }
+  h2 { font-size: 1.22rem; color: var(--accent); margin: 42px 0 14px; padding-bottom: 8px; border-bottom: 1px solid var(--line); }
+  h3 { font-size: 1.05rem; margin: 22px 0 8px; color: var(--ink); }
+  p { margin: 10px 0; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 18px 20px; margin: 14px 0; }
+  .layer { background: var(--card); border-left: 4px solid var(--blue); border-radius: 0 10px 10px 0; padding: 16px 20px; margin: 16px 0; }
+  .layer::before { content: attr(data-l); display: block; font-size: .78rem; color: var(--blue); font-weight: 700; letter-spacing: .1em; margin-bottom: 6px; }
+  .steal { background: #15201a; border-left: 4px solid var(--green); border-radius: 0 10px 10px 0; padding: 14px 18px; margin: 14px 0; }
+  .steal::before { content: "🏠 如菓可以偷學什麼"; font-weight: 700; display: block; margin-bottom: 6px; color: var(--green); font-size: .85rem; }
+  .warn { background: #231614; border-left: 4px solid var(--red); border-radius: 0 10px 10px 0; padding: 14px 18px; margin: 14px 0; }
+  table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: .9rem; }
+  th, td { border: 1px solid var(--line); padding: 9px 12px; text-align: left; vertical-align: top; }
+  th { background: #22262f; color: var(--accent); }
+  ol li, ul li { margin: 6px 0 6px 1.2em; }
+  code { background: #0c0e12; color: var(--green); padding: 2px 7px; border-radius: 5px; font-size: .85em; border: 1px solid var(--line); }
+  pre { background: #0c0e12; border: 1px solid var(--line); border-radius: 8px; padding: 14px; overflow-x: auto; font-size: .82rem; color: var(--ink); margin: 12px 0; }
+  .flow { font-family: ui-monospace, monospace; font-size: .82rem; color: var(--sub); }
+  footer { margin-top: 56px; padding-top: 18px; border-top: 1px solid var(--line); color: var(--sub); font-size: .78rem; text-align: center; }
+  a { color: var(--accent); }
+  .kpi { display: flex; gap: 12px; flex-wrap: wrap; margin: 14px 0; }
+  .kpi div { flex: 1 1 130px; background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 14px; text-align: center; }
+  .kpi b { display: block; font-size: 1.4rem; color: var(--accent); }
+  .kpi span { font-size: .78rem; color: var(--sub); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>Manus Playbook 逆向工程解構報告</h1>
+  <div class="sub">三層拆解 × 洩漏情報交叉驗證 × 可移植打法｜2026-06-11｜賈維斯</div>
+  <div>
+    <span class="badge">前端架構</span>
+    <span class="badge">模板機制</span>
+    <span class="badge">Agent 引擎</span>
+    <span class="badge">商業漏斗</span>
+    <span class="badge">情報來源 8+</span>
+  </div>
+</header>
+
+<div class="card">
+<p><b>研究方法：</b>仿照先前 arthurk01 股票報告的逆向工程做法，分四層由外而內拆解：(1) Playbook 頁面的<b>前端與內容架構</b>、(2) 單一 playbook 的<b>模板解剖</b>、(3) 背後 Manus <b>Agent 引擎</b>（用官方部落格＋洩漏的 system prompt 交叉驗證）、(4) 整套的<b>商業獲客設計</b>。最後給如菓可移植的打法。</p>
+<p><b>關鍵發現先講：</b>Manus 的核心機密幾乎是「半公開」的——system prompt 在 2025 年被用戶輕鬆問出（直接要求印出 <code>/opt/.manus/</code> 目錄即可），官方共同創辦人甚至主動寫部落格公開設計原則。所以這份逆向工程不靠猜，靠的是<b>把官方說法與洩漏實證對照</b>。</p>
+</div>
+
+<h2>第一層：Playbook 頁面的前端與內容架構</h2>
+<div class="layer" data-l="LAYER 1 — 外觀與頁面結構">
+<p>每個 playbook（如 video-generator）都是<b>同一個頁面模板填不同內容</b>，固定六段式結構：</p>
+<table>
+<tr><th>區塊</th><th>作用</th><th>逆向觀察</th></tr>
+<tr><td>① Hero 標題區</td><td>工具名＋一句價值主張＋CTA 按鈕</td><td>標題即 SEO 關鍵字（「AI 視頻生成器」）</td></tr>
+<tr><td>② 使用案例卡片</td><td>2-3 個應用場景示意</td><td>降低「我能用它做什麼」的想像門檻</td></tr>
+<tr><td>③ 工作流程圖</td><td>固定 3-4 步：描述→AI 處理→輸出</td><td>把 agent 的複雜過程簡化成「三步就好」</td></tr>
+<tr><td>④ FAQ（約 10 題）</td><td>免費嗎/難不難/商用授權/生成時間</td><td>大量長尾關鍵字，吃 Google 搜尋流量</td></tr>
+<tr><td>⑤ 品牌標語</td><td>"Less structure, more intelligence."</td><td>每頁重複，強化品牌記憶</td></tr>
+<tr><td>⑥ 頁腳 + CTA</td><td>多欄導航＋「開始生成」</td><td>所有 CTA 指向同一個 Manus App 入口</td></tr>
+</table>
+<p class="flow">技術線索：Next.js/React 單頁、15 語系、無明顯 Schema.org 標記、© 2026 Meta（Manus 已被 Meta 整併）。</p>
+</div>
+<div class="steal">
+這套「一個模板 × N 個落地頁」就是教科書級的 <b>Programmatic SEO</b>：80 個 playbook = 80 個吃不同關鍵字的入口頁，全部導向同一個產品。如菓的對應版本：把「台中系統櫃」「老屋翻新」「交屋裝潢」等每個關鍵字各做一頁落地頁（同模板換內容），全部導向估價預約——這正是瑪莉行銷漏斗可以用 Open Design 量產的東西。
+</div>
+
+<h2>第二層：單一 Playbook 的模板解剖</h2>
+<div class="layer" data-l="LAYER 2 — 一個 playbook 到底是什麼">
+<p>逆向結論：<b>一個 playbook = 一份「預填好的結構化提示詞 + 固定輸出格式」</b>。它不是新功能，是把同一個 Agent 引擎用「包裝好的任務說明」叫起來。拆開來看三個零件：</p>
+<ol>
+<li><b>角色與目標預設</b>——例如市場研究工具，已內建「你是市場分析師，產出含數據分析＋策略見解的報告」</li>
+<li><b>輸入欄位設計</b>——把使用者要給的資訊拆成幾個明確欄位（主題／地區／時間），降低「不會下提示詞」的門檻</li>
+<li><b>輸出格式鎖定</b>——固定章節結構（數據→消費者→競爭→商機），所以每次產出長得一樣專業</li>
+</ol>
+<p>證據：不同 playbook 共用同一批底層工具，只是「任務說明」不同——這跟我們的賈維斯助手團隊（同一個我，換不同人格設定檔）是<b>完全相同的設計思路</b>。</p>
+</div>
+<div class="steal">
+這正是我們已經在做的事，而且我們做得更深：<b>泰咪的報價資料庫、艾莉兒的工法五段式、風格轉換 SOP、講稿模板</b>——每一個都是如菓版的 playbook。Manus 驗證了這條路是對的。可以再系統化：把高頻任務（建案追蹤、提案書、報價審核）都寫成固定「輸入欄位＋輸出格式」的模板，老闆只要填欄位。
+</div>
+
+<h2>第三層：背後的 Agent 引擎（核心機密）</h2>
+<div class="card">
+<p>這層是真正值錢的部分。資料來源：Manus 共同創辦人 Yichao Ji 的官方部落格〈Context Engineering〉＋ 2025 年洩漏的 system prompt 與工具清單，兩者互相印證。</p>
+</div>
+
+<h3>3-1　運作循環（Agent Loop）</h3>
+<div class="layer" data-l="LAYER 3 — 引擎拆解">
+<pre>分析事件流 → 選 1 個工具 → 等執行結果 → 回填 context → 再選下一個工具 → ⋯ → 完成 → 待命</pre>
+<p>關鍵設計：<b>一次只呼叫一個工具</b>，耐心重複。平均一個任務跑約 <b>50 步</b>工具呼叫。洩漏的工具集有 <b>30+ 個</b>，分六類：</p>
+<table>
+<tr><th>類別</th><th>工具（節錄）</th></tr>
+<tr><td>通訊</td><td><code>message_notify_user</code>（單向報進度）、<code>message_ask_user</code>（必要才問）</td></tr>
+<tr><td>檔案</td><td><code>file_read / file_write / file_str_replace / file_find</code></td></tr>
+<tr><td>Shell</td><td><code>shell_exec / shell_view / shell_kill_process</code></td></tr>
+<tr><td>瀏覽器</td><td><code>browser_navigate / click / scroll / console_exec</code></td></tr>
+<tr><td>搜尋</td><td><code>info_search_web</code></td></tr>
+<tr><td>部署</td><td><code>deploy_expose_port / deploy_apply_deployment</code></td></tr>
+</table>
+<p class="flow">沙箱：每個 session 一個獨立 Ubuntu 22.04 容器，含 Python 3.10 / Node 20 / sudo / 連網，閒置自動休眠。</p>
+</div>
+
+<h3>3-2　官方親口的六大 Context Engineering 原則</h3>
+<div class="card">
+<table>
+<tr><th>原則</th><th>做法</th><th>為什麼（解決什麼）</th></tr>
+<tr><td>① KV-Cache 至上</td><td>提示前綴固定、不放時間戳、只追加不改寫</td><td>輸入是輸出的 100 倍；命中快取成本差 <b>10 倍</b>（$0.3 vs $3/MTok）</td></tr>
+<tr><td>② 工具用遮罩不用刪</td><td>用狀態機 + logits 遮罩開關工具</td><td>動態增刪工具會讓 KV-cache 失效、模型混亂</td></tr>
+<tr><td>③ 檔案系統當記憶</td><td>把資料寫檔，context 只留路徑/URL</td><td>避免 context 爆炸，又能隨時回讀</td></tr>
+<tr><td>④ todo.md 重述目標</td><td>不斷重寫待辦清單到 context 尾端</td><td>50 步長任務防「迷失在中間」、防跑題</td></tr>
+<tr><td>⑤ 保留失敗痕跡</td><td>錯誤、堆疊追蹤不擦掉</td><td>讓模型看到失敗、隱性學習、少犯同錯</td></tr>
+<tr><td>⑥ 避免少樣本陷阱</td><td>刻意加變化、不堆太多相似範例</td><td>防模型陷入機械式模仿</td></tr>
+</table>
+</div>
+<div class="steal">
+<b>這六條對我（賈維斯）的運作直接有用：</b><br>
+• <b>④ todo.md 重述</b>——長任務（像剛剛的 BNI 簡報多版迭代）我可以用待辦清單頂住目標不跑偏<br>
+• <b>③ 檔案當記憶</b>——這正是我們 data/ 知識庫＋ LLM Wiki 在做的；Manus 證明這是對的架構<br>
+• <b>⑤ 保留失敗</b>——呼應老闆昨天要的格局偏移分析報告：錯誤留檔、寫成 SOP，比擦掉重來更值錢<br>
+• <b>① 成本意識</b>——能省 context 輪數就省（這也是老闆 CLAUDE.md 的 TOKEN DISCIPLINE 鐵則）
+</div>
+
+<h3>3-3　System Prompt 透露的行為鐵則</h3>
+<div class="card">
+<ul>
+<li><b>資訊優先序</b>：官方資料 API &gt; 網路搜尋 &gt; 內部知識（跟我們「事實查核、禁止幻想」同精神）</li>
+<li><b>必須用工具、禁止純文字打發</b>：每一步都要實際動作</li>
+<li><b>所有 URL 必須用瀏覽器驗證</b>過才引用（呼應我們「VERIFY BEFORE DONE」）</li>
+<li><b>主動報進度、但少打擾</b>：notify 常用、ask 只在必要——跟老闆要的「長任務要回報」一模一樣</li>
+</ul>
+</div>
+
+<h2>第四層：商業獲客設計（它靠這個賺什麼）</h2>
+<div class="layer" data-l="LAYER 4 — 商業模式逆向">
+<p>整套 playbook 的商業邏輯：</p>
+<ol>
+<li><b>SEO 流量入口</b>：80 個 playbook 落地頁 + 每頁 10 題 FAQ = 數百個長尾關鍵字，免費吃 Google 搜尋流量</li>
+<li><b>降門檻轉化</b>：把「會用 AI」變成「按按鈕」，讓不會下提示詞的人也能成功 → 立刻體驗到價值</li>
+<li><b>點數變現</b>：免費試 → 上癮 → 任務要點數 → 付費訂閱（典型 PLG，product-led growth）</li>
+<li><b>內容飛輪</b>：26 篇部落格 + Academy 課程 + 社群，持續產內容餵 SEO 與信任</li>
+</ol>
+<p>本質：<b>用「免費好用的工具頁」當魚餌，把搜尋流量變成付費用戶。</b>工具本身就是行銷素材。</p>
+</div>
+<div class="steal">
+如菓的可移植版本：<b>「免費工具頁獲客」</b>是設計公司很少做但很有效的招。例如做一個「免費系統櫃估價試算」「免費老屋翻新風格測驗」的網頁工具，吃「台中系統櫃估價」這類搜尋字 → 用戶試用留資料 → 轉成丈量預約。工具本身就是內容行銷，比硬打廣告便宜。這個可以排進瑪莉的中長期計畫。
+</div>
+
+<h2>網路既有研究：別人已經拆過什麼</h2>
+<div class="card">
+<table>
+<tr><th>來源</th><th>研究成果</th></tr>
+<tr><td>洩漏 system prompt（GitHub gist, jlia0）</td><td>完整 30+ 工具清單與 prompt 全文公開</td></tr>
+<tr><td>官方部落格（Yichao Ji）</td><td>六大 context engineering 原則，創辦人親述</td></tr>
+<tr><td>技術調查 gist（renschni）</td><td>架構、工具編排、自主能力的深度調查</td></tr>
+<tr><td>CL4R1T4S / 多個 leak repo</td><td>把 Manus 與 Cursor/Devin/v0 等並列收錄系統提示</td></tr>
+<tr><td>Manus 官方回應（aibase）</td><td>承認 sandbox 可直接存取、程式碼僅輕度混淆、設計不保密</td></tr>
+<tr><td>Stormy AI / Medium 等</td><td>應用層逆向（用 Manus 反推爆紅短影片結構）</td></tr>
+</table>
+<p><b>洩漏事件的啟示：</b>Manus 官方態度是「我們的工具設計不是秘密、類似學界常見做法」——也就是說，<b>護城河不在 prompt，在於工程整合度（KV-cache 優化、沙箱、50 步穩定執行）與品牌/流量</b>。這對我們的啟發：別迷信「神級 prompt」，真正的競爭力在累積的資料庫、可控的工作流、和在地專業。</p>
+</div>
+
+<h2>總結：三句話帶走</h2>
+<div class="card">
+<ol>
+<li><b>一個 playbook = 預填提示詞 + 鎖定輸出格式</b>，叫的是同一個 Agent 引擎——我們的助手團隊與資料庫就是同思路，且更貼合在地。</li>
+<li><b>真正的技術在 context engineering 六原則</b>（KV-cache、todo.md、檔案當記憶、保留失敗）——其中四條我可以直接拿來優化日常運作。</li>
+<li><b>商業上它是 Programmatic SEO + PLG</b>：免費工具頁當魚餌換付費。如菓可借這招做「免費估價/風格測驗工具頁」獲客。</li>
+</ol>
+</div>
+
+<footer>
+本報告由賈維斯逆向工程彙整｜情報交叉自 manus.im 官方頁面/部落格、GitHub 洩漏 gist、第三方分析（2026-06-11）｜僅供如菓內部研究，非官方文件，洩漏內容引用自公開來源
+</footer>
+</div>
+</body>
+</html>
