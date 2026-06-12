@@ -1,0 +1,633 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>國立彰化特殊教育學校宿舍緊急求助鈴系統建置分析評估報告</title>
+  <style>
+    :root {
+      --ink: #1f2937;
+      --muted: #5b6472;
+      --line: #d9e1ec;
+      --soft: #f5f7fb;
+      --soft2: #eef4ff;
+      --accent: #174ea6;
+      --danger: #9f1239;
+      --ok: #166534;
+      --warn: #92400e;
+      --bg: #ffffff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", "Microsoft JhengHei", Arial, sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+      line-height: 1.72;
+      font-size: 16px;
+    }
+    .page {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 36px 24px 64px;
+    }
+    header {
+      border-bottom: 4px solid var(--accent);
+      padding-bottom: 22px;
+      margin-bottom: 28px;
+    }
+    h1 {
+      font-size: 30px;
+      line-height: 1.25;
+      margin: 0 0 12px;
+      letter-spacing: .02em;
+    }
+    .meta {
+      color: var(--muted);
+      font-size: 14px;
+    }
+    h2 {
+      font-size: 24px;
+      margin: 40px 0 14px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--line);
+    }
+    h3 {
+      font-size: 19px;
+      margin: 28px 0 8px;
+      color: #111827;
+    }
+    h4 { margin: 18px 0 6px; }
+    p { margin: 8px 0 14px; }
+    ul, ol { margin-top: 6px; padding-left: 1.35em; }
+    li { margin: 3px 0; }
+    .lead {
+      font-size: 18px;
+      background: var(--soft2);
+      border-left: 5px solid var(--accent);
+      padding: 16px 18px;
+      border-radius: 8px;
+      margin: 18px 0 24px;
+    }
+    .box {
+      background: var(--soft);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 16px 18px;
+      margin: 16px 0;
+    }
+    .note {
+      background: #fff8ed;
+      border: 1px solid #fed7aa;
+      border-left: 5px solid #f59e0b;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin: 16px 0;
+    }
+    .risk {
+      background: #fff1f2;
+      border: 1px solid #fecdd3;
+      border-left: 5px solid var(--danger);
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin: 16px 0;
+    }
+    .ok {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-left: 5px solid var(--ok);
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin: 16px 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0 24px;
+      font-size: 15px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 10px 12px;
+      vertical-align: top;
+    }
+    th {
+      background: #eef2f7;
+      font-weight: 700;
+      text-align: left;
+    }
+    tr:nth-child(even) td { background: #fbfcfe; }
+    .tag {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      background: #e0e7ff;
+      color: #3730a3;
+      margin-right: 4px;
+    }
+    .tag.must { background: #fee2e2; color: #991b1b; }
+    .tag.should { background: #dcfce7; color: #166534; }
+    .tag.check { background: #fef3c7; color: #92400e; }
+    a { color: var(--accent); word-break: break-all; }
+    .small { font-size: 13px; color: var(--muted); }
+    .toc {
+      background: #f8fafc;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 16px 20px;
+    }
+    .toc a { text-decoration: none; }
+    .ref-list li { margin-bottom: 8px; }
+    .signature {
+      margin-top: 42px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 14px;
+    }
+    @media print {
+      body { font-size: 12pt; }
+      .page { max-width: none; padding: 20mm 16mm; }
+      a { color: #000; text-decoration: none; }
+      h2 { page-break-before: auto; }
+      table { page-break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+<header>
+  <h1>國立彰化特殊教育學校宿舍緊急求助鈴系統建置分析評估報告</h1>
+  <div class="meta">版本：v1.1（已移除 Nurse Call 相關內容）｜製作日期：2026-06-12｜資料檢索日期：2026-06-12｜適用對象：學生宿舍、宿舍浴廁、宿舍公共區域與值勤接收端</div>
+</header>
+
+<section class="lead">
+  <strong>核心結論：</strong>依中央法規、教育部行政規則、彰化縣公共建築物無障礙勘檢作業原則及特教學校實務案例，國立彰化特殊教育學校宿舍內建置的系統，建議正式命名為「宿舍緊急求助鈴系統」或「校園求助系統」，其定位是<strong>校園安全輔助系統＋無障礙求助設備</strong>，建置重點應聚焦於學生住宿安全、無障礙求助、宿舍值班接收、現場查看、事件紀錄與定期檢測。
+</section>
+
+<nav class="toc">
+  <strong>目錄</strong>
+  <ol>
+    <li><a href="#scope">評估目的與範圍</a></li>
+    <li><a href="#verified">查證摘要</a></li>
+    <li><a href="#law">中央與地方規定</a></li>
+    <li><a href="#school">國立彰化特殊教育學校現況關聯</a></li>
+    <li><a href="#definition">系統定位與名稱</a></li>
+    <li><a href="#spec">建置功能與空間配置建議</a></li>
+    <li><a href="#workflow">操作流程與實際應用場景</a></li>
+    <li><a href="#benchmark">其他學校指引與案例</a></li>
+    <li><a href="#risk">風險分析與改善對策</a></li>
+    <li><a href="#procurement">採購規格、驗收與維護清單</a></li>
+    <li><a href="#refs">參考來源</a></li>
+  </ol>
+</nav>
+
+<h2 id="scope">一、評估目的與範圍</h2>
+<p>本報告針對「國立彰化特殊教育學校學生宿舍」建置宿舍緊急求助鈴系統進行法規、行政規則、實務案例與採購規格面之完整評估。報告目的包括：</p>
+<ol>
+  <li>確認宿舍房間、浴廁與公共區域設置緊急求助鈴的法規依據。</li>
+  <li>提出適用於特教學校宿舍的設備配置、通報流程、管理維護與驗收清單。</li>
+  <li>提供可納入標案、規劃設計、總務設備管理與校安宿舍管理制度的建議文字。</li>
+</ol>
+<div class="note">
+  <strong>限制說明：</strong>本報告依公開法規、官方文件與學校公開資料撰寫；尚未取得國立彰化特殊教育學校宿舍現場弱電平面圖、點位表、既有設備型錄、竣工圖、近年維修紀錄或主管機關勘檢紀錄。因此本報告不直接認定現場已設或未設特定點位，實際建置前仍需辦理現況盤點、建築師／專業技師確認與主管機關或校內審查。
+</div>
+
+<h2 id="verified">二、查證摘要</h2>
+<table>
+  <thead>
+    <tr><th>查證項目</th><th>查證結果</th><th>主要來源</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>特教學校宿舍應參照何種無障礙規範</td>
+      <td>教育部規定，學校教職員職務宿舍及學生宿舍如需設置無障礙設施設備，單房間宿舍參照建築物無障礙設施設計規範第十章「無障礙客房」，多房間宿舍參照無障礙住宅相關基準。</td>
+      <td>[S1]</td>
+    </tr>
+    <tr>
+      <td>宿舍房間求助鈴的法規語彙</td>
+      <td>中央規範使用「客房內求助鈴」、「求助鈴」、「緊急求助鈴」等語彙，應以校園安全與無障礙求助設備角度規劃。</td>
+      <td>[S1][S2]</td>
+    </tr>
+    <tr>
+      <td>彰化縣地方勘檢相關性</td>
+      <td>彰化縣訂有公共建築物無障礙設施勘檢作業原則，涉及新建、增建、變更使用或替代改善計畫時，需依地方無障礙勘檢程序處理。</td>
+      <td>[S4]</td>
+    </tr>
+    <tr>
+      <td>國立彰化特教宿舍管理關聯</td>
+      <td>學校公開宿舍管理文件顯示宿舍設有住宿管理員、小夜班與大夜班，職責含住宿生日常輔導、緊急事故處理與宿舍安全維護。</td>
+      <td>[S6]</td>
+    </tr>
+    <tr>
+      <td>學校現有安全管理制度關聯</td>
+      <td>國立彰化特教性別平等教育實施計畫已列入緊急求助鈴自主檢測、偏僻地區檢視、校園安全空間檢視與宿舍防災／性平宣導。</td>
+      <td>[S7]</td>
+    </tr>
+    <tr>
+      <td>其他特教學校案例</td>
+      <td>國立臺南特殊教育學校有「校園求助系統管理作業要點」；國立臺東大學附屬特殊教育學校有宿舍及校園緊急求助鈴自主檢測制度。</td>
+      <td>[S11][S12]</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="law">三、中央與地方規定</h2>
+
+<h3>3.1 特殊教育法：無障礙與合理調整是特教支持服務的一部分</h3>
+<p>《特殊教育法》明定特殊教育服務措施、設施之設置應符合融合、個別化、通用設計、合理調整、社區化與無障礙精神；學校也應依學生教育需求，提供包括校園無障礙環境在內的支持服務。對特教宿舍而言，緊急求助鈴不是單一弱電設備，而是學生住宿安全、無障礙支持與校園安全管理的一環。</p>
+<table>
+  <thead><tr><th>法規方向</th><th>對宿舍緊急求助鈴的意義</th></tr></thead>
+  <tbody>
+    <tr><td>通用設計與合理調整</td><td>系統應讓不同障別學生在床上、輪椅上、跌倒後或浴廁內皆能求助。</td></tr>
+    <tr><td>校園無障礙環境</td><td>求助鈴點位、按鈕高度、標示、操作力、可觸及性與通報接收端需整體檢討。</td></tr>
+    <tr><td>支持服務</td><td>設備建置需結合宿舍值班、護理、學務、輔導、總務與保全處置流程。</td></tr>
+  </tbody>
+</table>
+
+<h3>3.2 教育部：特教學校宿舍的無障礙設施設備依據</h3>
+<p>教育部《公立高級中等以下學校及特殊教育學校無障礙設施設備設置要點》是本案最直接的教育行政規則之一。其重點如下：</p>
+<ul>
+  <li>學校校舍、運動場館、活動中心、停車場、戶外教學場地、宿舍等屬於學校無障礙設施設備檢討範圍。</li>
+  <li>單房間宿舍參照《建築物無障礙設施設計規範》第十章「無障礙客房」的通則、衛浴設備、設置尺寸與客房內求助鈴。</li>
+  <li>多房間宿舍則參照《無障礙住宅設計基準及獎勵辦法》的特定房間、浴室及廁所規定。</li>
+</ul>
+<p>因此，國立彰化特殊教育學校若辦理宿舍房間或浴廁求助鈴建置，應優先以「學校宿舍無障礙設施設備」及「校園安全求助系統」的角度規劃，並將設備功能與宿舍值班、校安通報、總務維護及學生安全教育整合。</p>
+
+<h3>3.3 建築物無障礙設施設計規範：房內與衛浴求助鈴</h3>
+<p>依國土管理署公開之《建築物無障礙設施設計規範》資料，無障礙客房與衛浴空間的求助鈴核心要求包括：</p>
+<table>
+  <thead><tr><th>空間</th><th>設置原則</th><th>實務建議</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>房間內</td>
+      <td>房間內求助鈴至少兩處；其中一處為一般可及高度，另一處需供跌倒後使用；按鈕需明確標示、易觸控。</td>
+      <td>床邊或輪椅活動區設一般高度求助鈴，另於低位或以拉繩方式提供倒地後可及之求助方式。</td>
+    </tr>
+    <tr>
+      <td>廁所</td>
+      <td>無障礙廁所應設緊急求助鈴，並考量馬桶旁與跌倒後可及位置。</td>
+      <td>馬桶旁設防水緊急按鈕或拉繩，並設低位拉繩端或低位按鈕。</td>
+    </tr>
+    <tr>
+      <td>浴室／淋浴間</td>
+      <td>浴室求助鈴應兼顧站立、坐姿與跌倒後使用。</td>
+      <td>淋浴區建議使用防水拉繩式求助鈴，拉繩需低位可及且避免纏繞危險。</td>
+    </tr>
+    <tr>
+      <td>通報接收</td>
+      <td>求助鈴應連接至服務台或類似空間；若無服務台，應連接至房外警示燈或聲響。</td>
+      <td>特教宿舍宜連接宿舍值班室、傳達室或保全端，並於房門外設警示燈／聲響以利現場定位。</td>
+    </tr>
+  </tbody>
+</table>
+<div class="note">
+  <strong>高度版本注意：</strong>公開資料可見不同年度版本對低位求助鈴高度有差異，例如部分版本以 35–45 公分表示，較新資料或整理則可能列為 15–25 公分。實際發包與施工前，應由建築師或專業技師依內政部／國土管理署最新有效版本及彰化縣建設處勘檢要求確認。若採拉繩式設計，建議讓拉繩末端延伸至跌倒後可及低位，並同時維持輪椅使用者的可操作性。</div>
+
+<h3>3.4 教育部主管高級中等學校學生宿舍管理注意事項</h3>
+<p>教育部主管高級中等學校學生宿舍管理注意事項要求學校訂定宿舍管理規定，內容應包含安全維護、宿舍防災與逃生演練、值勤紀錄、宿舍日誌、緊急聯繫方式與應變處理方式；辦理學生房間分配及宿舍管理時，也應在合理可行範圍內考量身心障礙學生特殊需求。</p>
+<p>因此，求助鈴系統不能只被視為「安裝設備」，還需納入宿舍管理制度，包括夜間值勤、警報接收、現場查看、通報、復歸、事件紀錄與定期測試。</p>
+
+<h3>3.5 教育部災害防救要點</h3>
+<p>教育部相關災害防救要點要求學校建立災害防救組織、校安及災害通報處理中心、通訊設備、24 小時聯絡值勤、校園災害防救計畫、演練、設備整備與維護、緊急聯絡資料庫。對宿舍求助鈴而言，系統應與校安通報、宿舍災害演練及夜間應變流程整合，而不是孤立運作。</p>
+
+<h3>3.6 彰化縣公共建築物無障礙設施勘檢作業原則</h3>
+<p>彰化縣政府訂有公共建築物無障礙設施勘檢作業原則，適用於新建或增建公共建築物使用執照、建築物用途變更、變更使用涉及替代改善計畫，以及身心障礙者權益保障法第五十七條第二項所涉替代改善計畫等情形。主管機關為彰化縣政府，承辦單位為建設處，並由無障礙設施勘檢小組辦理勘檢；既有公共建築物之無障礙設施需符合可及性、可用性及安全性。</p>
+<p>因此，國立彰化特殊教育學校宿舍若涉及新建、改建、增建、變更使用或無障礙改善，除中央法規外，也應同步確認彰化縣建設處勘檢程序與地方實務要求。</p>
+
+<h2 id="school">四、國立彰化特殊教育學校現況關聯</h2>
+
+<h3>4.1 學校與宿舍公開資訊</h3>
+<p>國立彰化特殊教育學校位於彰化縣社頭鄉中山路一段 306 號。學校公開宿舍頁面列有宿舍管理實施要點、學生宿舍危機事件通報程序、住宿配合事項等文件，並公開宿舍空間照片分類，包括宿舍大門、一樓門廳、一樓辦公區、一樓餐廳、一樓休憩區、一樓廁所、二樓辦公區、二樓活動區、二樓廁所、宿舍廊道、宿舍單人房型與宿舍雙人房型。</p>
+<p>這代表本案至少需要檢討下列空間：</p>
+<ul>
+  <li>宿舍單人房型、雙人房型。</li>
+  <li>一樓與二樓廁所。</li>
+  <li>宿舍廊道、門廳、活動區、洗衣或其他輔助空間。</li>
+  <li>一樓或二樓辦公區、值班接收端。</li>
+</ul>
+
+<h3>4.2 宿舍管理制度與緊急處理責任</h3>
+<p>學校宿舍管理實施要點顯示，宿舍設有住宿管理員、小夜班與大夜班，負責住宿生日常輔導、緊急事故處理、住宿生生活常規、用餐、夜間住宿生管理、宿舍安全維護與公共設備維護管理等事項。公開文件也說明住宿申請以具基本生活自理能力、生活技能、無重大或傳染性疾病、情緒穩定且無攻擊行為者為原則。</p>
+<p>這些內容顯示，宿舍求助鈴系統的接收端與處置流程，應優先銜接住宿管理員與夜間值班制度，並輔以學務處、護理人員、保全與校安通報機制。</p>
+
+<h3>4.3 學校既有安全管理計畫的連結</h3>
+<p>國立彰化特殊教育學校 114 學年度性別平等教育實施計畫已列入安全友善空間、校園安全空間檢視、緊急求助鈴自主檢測、校內偏僻地區檢視與視情況加裝求助鈴，並規劃宿舍防災暨性平宣導。這提供了本案非常重要的校內制度銜接點：</p>
+<ol>
+  <li>新系統建置後，應納入每週或每月自主檢測表。</li>
+  <li>宿舍房間與浴廁點位應納入校園安全空間檢視。</li>
+  <li>警報觸發與處置流程應納入宿舍防災、性平、安全教育與新生入住宣導。</li>
+  <li>求助鈴異常、誤報與通報紀錄應能提供總務、學務、宿舍管理與性平／校安風險檢討使用。</li>
+</ol>
+
+<h2 id="definition">五、系統定位與名稱</h2>
+
+<h3>5.1 建議正式名稱</h3>
+<div class="ok">
+  <strong>建議名稱：</strong>「國立彰化特殊教育學校學生宿舍緊急求助鈴系統」或「國立彰化特殊教育學校宿舍暨校園求助系統」。
+</div>
+
+<h3>5.2 系統正式定位</h3>
+<table>
+  <thead><tr><th>定位面向</th><th>本案建議內容</th></tr></thead>
+  <tbody>
+    <tr><td>法規語彙</td><td>以「客房內求助鈴」、「緊急求助鈴」、「宿舍緊急求助鈴系統」或「校園求助系統」作為主要名稱。</td></tr>
+    <tr><td>主要目的</td><td>學生安全、無障礙求助、宿舍緊急通報、校安應變與設備維護管理。</td></tr>
+    <tr><td>接收端</td><td>宿舍值班室、住宿管理員、傳達室、保全、學務處、總務處或其他校內指定值勤端。</td></tr>
+    <tr><td>必要資訊</td><td>棟別、樓層、房號、浴廁、公共區域點位、觸發時間、復歸狀態與故障狀態。</td></tr>
+    <tr><td>紀錄目的</td><td>安全巡檢、宿舍事件處置、校安應變、設備維護、定期檢測與後續改善追蹤。</td></tr>
+  </tbody>
+</table>
+<p>採購文件應以學校宿舍安全與無障礙求助為核心，明確規定點位、接收端、警示方式、復歸方式、事件紀錄、故障告警、備援電源與定期檢測要求，避免因名稱不明造成廠商規格偏離實際需求。</p>
+
+<h2 id="spec">六、建置功能與空間配置建議</h2>
+
+<h3>6.1 系統架構</h3>
+<p>建議架構如下：</p>
+<ol>
+  <li><strong>前端觸發設備：</strong>房內一般高度求助鈴、低位求助鈴、浴廁防水按鈕、淋浴拉繩、公共區域求助鈴。</li>
+  <li><strong>區域警示設備：</strong>房門外警示燈、走廊聲光警示、浴廁外警示燈。</li>
+  <li><strong>中控與顯示：</strong>宿舍值班室顯示盤或電腦端，顯示棟別、樓層、房號、點位、時間與狀態。</li>
+  <li><strong>通知與紀錄：</strong>事件紀錄、復歸紀錄、故障紀錄、可選配手機或簡訊通知。</li>
+  <li><strong>備援與維護：</strong>UPS 備援電源、線路斷線或設備故障告警、定期測試與維修紀錄。</li>
+</ol>
+
+<h3>6.2 房間內點位建議</h3>
+<table>
+  <thead><tr><th>位置</th><th>設備</th><th>設計重點</th><th>必要性</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>床邊或床頭側</td>
+      <td>一般高度求助按鈕</td>
+      <td>學生躺臥、坐起或移位時可觸及；避免被家具遮蔽。</td>
+      <td><span class="tag must">必要</span></td>
+    </tr>
+    <tr>
+      <td>房內低位</td>
+      <td>低位按鈕或拉繩式求助鈴</td>
+      <td>供跌倒後使用；高度依最新無障礙規範與地方勘檢確認。</td>
+      <td><span class="tag must">必要</span></td>
+    </tr>
+    <tr>
+      <td>輪椅迴轉或移位區</td>
+      <td>可及求助按鈕</td>
+      <td>避免只設於門邊；需考量輪椅正向或側向接近。</td>
+      <td><span class="tag should">建議</span></td>
+    </tr>
+    <tr>
+      <td>房門外</td>
+      <td>警示燈／聲響</td>
+      <td>讓值班人員到場後可快速辨識房間；也可作為服務台替代警示。</td>
+      <td><span class="tag must">必要</span></td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>6.3 廁所、浴室與淋浴區點位建議</h3>
+<table>
+  <thead><tr><th>位置</th><th>設備</th><th>設計重點</th><th>必要性</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>馬桶旁</td>
+      <td>防水緊急按鈕或拉繩</td>
+      <td>如廁後無法起身、跌倒或身體不適時可操作。</td>
+      <td><span class="tag must">必要</span></td>
+    </tr>
+    <tr>
+      <td>浴室低位</td>
+      <td>低位拉繩端或低位按鈕</td>
+      <td>供跌倒後使用；拉繩需避免纏繞、誤觸與清潔障礙。</td>
+      <td><span class="tag must">必要</span></td>
+    </tr>
+    <tr>
+      <td>淋浴區</td>
+      <td>防水拉繩式求助鈴</td>
+      <td>濕區優先選用防水、防潮、易清潔設備。</td>
+      <td><span class="tag should">建議</span></td>
+    </tr>
+    <tr>
+      <td>浴廁外側</td>
+      <td>警示燈／聲響</td>
+      <td>避免只在中控端顯示，現場也要快速定位。</td>
+      <td><span class="tag must">必要</span></td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>6.4 接收端與通報設計</h3>
+<table>
+  <thead><tr><th>接收端</th><th>功能</th><th>建議</th></tr></thead>
+  <tbody>
+    <tr><td>宿舍值班室／辦公區</td><td>第一時間顯示警報位置與狀態</td><td>必設，應顯示棟別、樓層、房號、點位、時間、是否復歸。</td></tr>
+    <tr><td>傳達室／警衛室／保全</td><td>夜間或非上班時間承接通報</td><td>建議同步顯示或轉通知，避免值班室無人時漏接。</td></tr>
+    <tr><td>學務處或宿舍管理窗口</td><td>事件處理與後續紀錄</td><td>建議具備查詢紀錄功能。</td></tr>
+    <tr><td>總務處</td><td>設備維護、測試、維修</td><td>建議可查看故障、斷線、低電源、測試紀錄。</td></tr>
+    <tr><td>護理或輔導窗口</td><td>傷病、情緒、身心狀況協助</td><td>依事件類型通知，不一定作為第一接收端。</td></tr>
+  </tbody>
+</table>
+
+<h3>6.5 系統功能等級建議</h3>
+<table>
+  <thead><tr><th>功能</th><th>最低要求</th><th>建議加強</th></tr></thead>
+  <tbody>
+    <tr><td>點位識別</td><td>至少顯示棟別／樓層／房號／浴廁或公共區域</td><td>可標示房內、馬桶旁、淋浴區、低位求助等細部點位。</td></tr>
+    <tr><td>警示方式</td><td>中控聲響＋房外警示燈</td><td>走廊方向燈、螢幕跳圖、手機推播。</td></tr>
+    <tr><td>復歸</td><td>現場復歸或管理端確認復歸</td><td>建議需現場復歸，避免未到場即遠端消警。</td></tr>
+    <tr><td>紀錄</td><td>至少保留觸發時間、點位、復歸時間</td><td>保留處置人員、事件類型、備註、維修狀態，可匯出。</td></tr>
+    <tr><td>故障監測</td><td>設備斷線或異常可被發現</td><td>每日自檢、斷線告警、電源異常告警、電池異常告警。</td></tr>
+    <tr><td>備援</td><td>停電時基本警報不應立即失效</td><td>主機、網路設備與警示端配 UPS，並測試備援時間。</td></tr>
+  </tbody>
+</table>
+
+<h2 id="workflow">七、操作流程與實際應用場景</h2>
+
+<h3>7.1 標準操作流程</h3>
+<ol>
+  <li>學生在房內、浴廁或公共區域按下求助鈴或拉動拉繩。</li>
+  <li>房門外或浴廁外警示燈亮起，宿舍值班室或警衛室同步收到聲光警示。</li>
+  <li>值班人員依顯示點位確認位置，攜帶鑰匙、對講機與必要急救用品前往。</li>
+  <li>到場確認學生狀況，進行初步處置。</li>
+  <li>視事件類型通知護理人員、學務處、家長、輔導室、總務處、119、110 或校安窗口。</li>
+  <li>事件排除後進行現場復歸。</li>
+  <li>系統自動或人工建立事件紀錄，包括時間、地點、處置人員、結果與後續改善。</li>
+</ol>
+
+<h3>7.2 應用場景案例</h3>
+<table>
+  <thead><tr><th>場景</th><th>觸發點位</th><th>處置流程</th><th>設計重點</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>夜間洗澡跌倒</td>
+      <td>淋浴區拉繩或浴廁低位求助鈴</td>
+      <td>值班人員到浴廁確認，必要時通知護理人員與 119；復歸後記錄跌倒原因。</td>
+      <td>防水、低位可及、浴廁外警示燈、防滑與扶手一併檢討。</td>
+    </tr>
+    <tr>
+      <td>學生房內癲癇或身體不適</td>
+      <td>床邊求助鈴或房內低位求助鈴</td>
+      <td>值班人員到房，依健康紀錄通知護理人員、家長或 119。</td>
+      <td>床邊可及，避免家具遮蔽；事件紀錄供後續照護計畫調整。</td>
+    </tr>
+    <tr>
+      <td>情緒失控、自傷或衝突</td>
+      <td>房內求助鈴或走廊求助鈴</td>
+      <td>值班人員先到場評估，必要時啟動學務、輔導、護理、保全或校安通報。</td>
+      <td>求助鈴應可快速定位，但不應取代人員訓練與危機處理 SOP。</td>
+    </tr>
+    <tr>
+      <td>災害或火警疏散中學生受困</td>
+      <td>宿舍房內或廊道求助鈴</td>
+      <td>災害應變小組依點位派員協助避難或移至等待救援空間。</td>
+      <td>系統需與災害防救、校安通報、避難路線與無障礙避難策略整合。</td>
+    </tr>
+    <tr>
+      <td>誤觸或設備異常</td>
+      <td>任一求助鈴</td>
+      <td>現場確認後復歸，標記誤觸或故障，必要時通知總務或廠商。</td>
+      <td>事件分類、故障追蹤、定期測試與防誤觸設計同等重要。</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="benchmark">八、其他學校指引與案例</h2>
+
+<h3>8.1 國立臺南特殊教育學校：校園求助系統管理作業要點</h3>
+<p>國立臺南特殊教育學校公開的「校園求助系統管理作業要點」明確說明，其目的在於改善校園危險空間、整合行政資源、維護校園安全、防範意外事故與即時處理校園安全突發事件。該校於各大樓廁所、校園偏僻或危險角落及教室設置求助按鈕，並建立行政分工、教育訓練、復歸、責任區域與非上班時間由保全承接等機制。</p>
+<p>可供本案參考之重點：</p>
+<ul>
+  <li>系統名稱採「校園求助系統」，符合學校情境。</li>
+  <li>求助鈴使用說明納入新生始業輔導、防火防災演練、校園安全教育及宿舍防災疏散演練。</li>
+  <li>總務負責設備維護，學務負責安全突發事件掌握、處理與通報。</li>
+  <li>非上班時間由保全承接救援工作。</li>
+</ul>
+
+<h3>8.2 國立臺東大學附屬特殊教育學校：宿舍求助鈴自主檢測</h3>
+<p>國立臺東大學附屬特殊教育學校公開計畫列有緊急求助鈴自主檢測，並提到校園全區及宿舍每月初利用安全巡檢時檢測。可供本案參考的是，求助鈴建置後需形成制度化檢測，而不是只在施工驗收時測試一次。</p>
+
+<h3>8.3 國立彰化特殊教育學校既有制度銜接</h3>
+<p>國立彰化特殊教育學校本身已在公開計畫中列入緊急求助鈴自主檢測、校園安全空間檢視與宿舍防災宣導。新建系統應直接接軌既有制度，而非另行建立互不相連的維護表單。</p>
+
+<h2 id="risk">九、風險分析與改善對策</h2>
+<table>
+  <thead><tr><th>風險類型</th><th>問題</th><th>可能後果</th><th>對策</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>法規符合性</td>
+      <td>只裝一般緊急壓扣，未檢討無障礙高度、浴廁求助、房外警示或接收端。</td>
+      <td>無障礙勘檢或校內審查疑義；學生實際跌倒時無法使用。</td>
+      <td>依教育部設置要點、建築物無障礙設施設計規範及彰化縣勘檢要求規劃。</td>
+    </tr>
+    <tr>
+      <td>營運管理</td>
+      <td>設備有警報，但無人接收、無人到場或無紀錄。</td>
+      <td>延誤救援，責任難以釐清。</td>
+      <td>明定宿舍值班、保全、學務、護理、總務分工與事件紀錄。</td>
+    </tr>
+    <tr>
+      <td>設備可靠性</td>
+      <td>斷線、停電、主機故障或警示燈故障無告警。</td>
+      <td>緊急時無法求助。</td>
+      <td>加入故障監測、UPS、定期測試與維修 SLA。</td>
+    </tr>
+    <tr>
+      <td>點位不足</td>
+      <td>只在門邊設按鈕，床邊、低位、浴廁或淋浴區無法觸及。</td>
+      <td>跌倒或行動受限時無法啟動。</td>
+      <td>依生活動線、障別需求與跌倒情境配置多點位。</td>
+    </tr>
+    <tr>
+      <td>誤觸與濫用</td>
+      <td>學生誤觸、惡作劇或設備太敏感。</td>
+      <td>警報疲乏，值班人員降低警覺。</td>
+      <td>採明確標示、防誤觸外蓋、教育訓練與誤觸紀錄分析。</td>
+    </tr>
+    <tr>
+      <td>隱私與個資</td>
+      <td>系統若整合攝影機或手機通知，可能涉及隱私。</td>
+      <td>宿舍隱私爭議、資料管理責任。</td>
+      <td>只傳送必要點位資訊，避免宿舍房內攝影；建立存取權限與紀錄保存規範。</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="procurement">十、採購規格、驗收與維護清單</h2>
+
+<h3>10.1 建議採購規格文字</h3>
+<div class="box">
+  <p>本案系統名稱建議為「國立彰化特殊教育學校學生宿舍緊急求助鈴系統」。系統應設置於學生宿舍房間、宿舍浴廁及必要公共區域，並具備房號／點位識別、現場聲光警示、宿舍值班室或管理端警報顯示、現場復歸、事件紀錄、故障告警及備援電源。無障礙宿舍房間求助鈴設置應參照《公立高級中等以下學校及特殊教育學校無障礙設施設備設置要點》及《建築物無障礙設施設計規範》第十章無障礙客房相關規定辦理。宿舍房內應設一般可及高度求助鈴及跌倒後可使用之低位求助鈴；浴廁內應依馬桶、淋浴或浴缸使用情境設置防水型求助鈴或拉繩式求助鈴，訊號應連接至宿舍值班室、傳達室或類似接收空間，並於房外或浴廁外設置警示燈或聲響。</p>
+</div>
+
+<h3>10.2 建置前現況調查清單</h3>
+<ul>
+  <li>宿舍房型：單人房、雙人房、多人房及實際入住障別需求。</li>
+  <li>浴廁類型：一樓、二樓廁所，是否有淋浴區、無障礙廁所、共用浴廁。</li>
+  <li>值班端：宿舍一樓／二樓辦公區、警衛室、傳達室、保全值勤點。</li>
+  <li>既有弱電：電源、網路、管線、警報主機、監控設備、廣播系統、消防受信總機是否可整合。</li>
+  <li>既有求助鈴：盤點現有點位、功能、是否故障、是否有紀錄、是否符合高度與可及性。</li>
+  <li>行政流程：學生宿舍危機事件通報程序、宿舍值勤表、校安通報、護理與家長聯絡流程。</li>
+</ul>
+
+<h3>10.3 驗收測試清單</h3>
+<table>
+  <thead><tr><th>項目</th><th>驗收方式</th><th>合格判斷</th></tr></thead>
+  <tbody>
+    <tr><td>每一點位觸發</td><td>逐一按壓或拉動求助鈴</td><td>接收端顯示正確棟別、樓層、房號與點位。</td></tr>
+    <tr><td>房外／浴廁外警示</td><td>觸發後確認燈號與聲響</td><td>現場可快速辨識位置。</td></tr>
+    <tr><td>復歸功能</td><td>到現場復歸或依規定復歸</td><td>系統狀態恢復正常且留下紀錄。</td></tr>
+    <tr><td>事件紀錄</td><td>匯出或查詢事件資料</td><td>至少含觸發時間、點位、復歸時間與狀態。</td></tr>
+    <tr><td>故障告警</td><td>模擬斷線、斷電或設備異常</td><td>管理端可辨識異常，不得靜默失效。</td></tr>
+    <tr><td>備援電源</td><td>模擬停電</td><td>主機及基本警示可於約定時間內維持運作。</td></tr>
+    <tr><td>標示與可及性</td><td>現場量測與試用</td><td>高度、位置、標示、操作性符合設計與最新規範要求。</td></tr>
+    <tr><td>教育訓練</td><td>查核訓練紀錄</td><td>宿舍值班、保全、總務、學務相關人員均完成操作訓練。</td></tr>
+  </tbody>
+</table>
+
+<h3>10.4 維護與管理建議</h3>
+<table>
+  <thead><tr><th>週期</th><th>執行項目</th><th>負責建議</th></tr></thead>
+  <tbody>
+    <tr><td>每日／每班</td><td>值班接收端狀態確認、異常警示確認。</td><td>宿舍值班人員</td></tr>
+    <tr><td>每週</td><td>抽測部分點位、確認警示燈與接收端。</td><td>宿舍管理／總務</td></tr>
+    <tr><td>每月</td><td>全點位自主檢測、填寫檢測表、追蹤故障改善。</td><td>總務處主責，學務與宿舍配合</td></tr>
+    <tr><td>每學期</td><td>納入校園安全空間檢視、宿舍防災或安全教育演練。</td><td>學務處、總務處、宿舍管理</td></tr>
+    <tr><td>每年</td><td>檢討事件紀錄、誤報頻率、維修紀錄、點位增修需求。</td><td>校安／學務／總務會議檢討</td></tr>
+  </tbody>
+</table>
+
+<h3>10.5 建議分期</h3>
+<table>
+  <thead><tr><th>期程</th><th>工作內容</th><th>產出文件</th></tr></thead>
+  <tbody>
+    <tr><td>第一階段：現況盤點</td><td>測量宿舍房間、浴廁、值班端、既有管線與既有求助鈴。</td><td>現況點位表、照片、弱電平面圖、缺失清單。</td></tr>
+    <tr><td>第二階段：設計規劃</td><td>決定點位、高度、接收端、警示方式、紀錄與備援設計。</td><td>設計圖說、設備規格表、施工規範。</td></tr>
+    <tr><td>第三階段：採購施工</td><td>依規格發包、安裝、線路測試與標示。</td><td>施工日誌、材料型錄、竣工圖。</td></tr>
+    <tr><td>第四階段：驗收訓練</td><td>逐點測試、故障模擬、備援測試、使用者訓練。</td><td>驗收紀錄、教育訓練紀錄、操作手冊。</td></tr>
+    <tr><td>第五階段：制度化維護</td><td>納入每月檢測、宿舍防災演練、校安通報流程。</td><td>月檢表、事件紀錄表、年度檢討報告。</td></tr>
+  </tbody>
+</table>
+
+<h2 id="refs">十一、參考來源</h2>
+<ol class="ref-list">
+  <li id="s1"><strong>[S1] 教育部主管法規查詢系統：</strong>《公立高級中等以下學校及特殊教育學校無障礙設施設備設置要點》。<br><a href="https://edu.law.moe.gov.tw/LawContent.aspx?id=GL002223" target="_blank">https://edu.law.moe.gov.tw/LawContent.aspx?id=GL002223</a></li>
+  <li id="s2"><strong>[S2] 內政部國土管理署：</strong>《建築物無障礙設施設計規範》PDF。<br><a href="https://www.nlma.gov.tw/uploads/files/a5fc1f6258d7a0d88ce06afde8c68128.pdf" target="_blank">https://www.nlma.gov.tw/uploads/files/a5fc1f6258d7a0d88ce06afde8c68128.pdf</a></li>
+  <li id="s3"><strong>[S3] 內政部：</strong>《無障礙住宅設計基準及獎勵辦法》。<br><a href="https://glrs.moi.gov.tw/LawContent.aspx?id=GL000458" target="_blank">https://glrs.moi.gov.tw/LawContent.aspx?id=GL000458</a></li>
+  <li id="s4"><strong>[S4] 彰化縣政府建設處：</strong>《彰化縣公共建築物無障礙設施勘檢作業原則》。<br><a href="https://www.chcg.gov.tw/DTO/economic/07other/other01_con.aspx?topsn=827&data_id=12972" target="_blank">https://www.chcg.gov.tw/DTO/economic/07other/other01_con.aspx?topsn=827&amp;data_id=12972</a></li>
+  <li id="s5"><strong>[S5] 國立彰化特殊教育學校：</strong>學生宿舍公開頁面。<br><a href="https://www.chsmr.chc.edu.tw/stay/" target="_blank">https://www.chsmr.chc.edu.tw/stay/</a></li>
+  <li id="s6"><strong>[S6] 國立彰化特殊教育學校：</strong>《學生宿舍管理實施要點》PDF。<br><a href="https://www.chsmr.chc.edu.tw/wp-content/uploads/sites/98/2023/08/%E5%9C%8B%E7%AB%8B%E5%BD%B0%E5%8C%96%E7%89%B9%E6%AE%8A%E6%95%99%E8%82%B2%E5%AD%B8%E6%A0%A1%E5%AD%B8%E7%94%9F%E5%AE%BF%E8%88%8D%E7%AE%A1%E7%90%86%E5%AF%A6%E6%96%BD%E8%A6%81%E9%BB%9E11108.pdf" target="_blank">https://www.chsmr.chc.edu.tw/.../學生宿舍管理實施要點11108.pdf</a></li>
+  <li id="s7"><strong>[S7] 國立彰化特殊教育學校：</strong>《114學年度性別平等教育實施計畫》PDF。<br><a href="https://www.chsmr.chc.edu.tw/wp-content/uploads/sites/98/2025/09/114%E5%AD%B8%E5%B9%B4%E5%BA%A6%E6%80%A7%E5%88%A5%E5%B9%B3%E7%AD%89%E6%95%99%E8%82%B2%E5%AF%A6%E6%96%BD%E8%A8%88%E7%95%AB-1.pdf" target="_blank">https://www.chsmr.chc.edu.tw/.../114學年度性別平等教育實施計畫-1.pdf</a></li>
+  <li id="s8"><strong>[S8] 教育部防災教育資訊網：</strong>國立彰化特殊教育學校校園防災資料。<br><a href="https://disaster.moe.edu.tw/WebMoeInfo/NewInfo/Campus/Details/148" target="_blank">https://disaster.moe.edu.tw/WebMoeInfo/NewInfo/Campus/Details/148</a></li>
+  <li id="s9"><strong>[S9] 教育部主管法規查詢系統：</strong>《特殊教育法》。<br><a href="https://edu.law.moe.gov.tw/LawContent.aspx?id=FL009136" target="_blank">https://edu.law.moe.gov.tw/LawContent.aspx?id=FL009136</a></li>
+  <li id="s10"><strong>[S10] 教育部國民及學前教育署：</strong>《教育部主管高級中等學校學生宿舍管理注意事項》。<br><a href="https://www.k12ea.gov.tw/Tw/Station/AffairDetail?filter=63F293A9-0155-41A3-97B7-46E43E4685FE&id=e4254994-86b2-4d30-93a0-050a67c29de7" target="_blank">https://www.k12ea.gov.tw/Tw/Station/AffairDetail?...id=e4254994-86b2-4d30-93a0-050a67c29de7</a></li>
+  <li id="s11"><strong>[S11] 國立臺南特殊教育學校：</strong>《校園求助系統管理作業要點》PDF。<br><a href="https://www.tnmr.tn.edu.tw/wp-content/uploads/sites/119/2024/02/03-%E6%A0%A1%E5%9C%92%E6%B1%82%E5%8A%A9%E9%88%B4%E7%B3%BB%E7%B5%B1%E7%AE%A1%E7%90%86%E4%BD%9C%E6%A5%AD%E8%A6%81%E9%BB%9E.pdf" target="_blank">https://www.tnmr.tn.edu.tw/.../校園求助鈴系統管理作業要點.pdf</a></li>
+  <li id="s12"><strong>[S12] 國立臺東大學附屬特殊教育學校：</strong>性別平等教育實施計畫中校園及宿舍緊急求助鈴自主檢測資料。<br><a href="https://nttusps.nttu.edu.tw/var/file/65/1065/img/886487933.pdf" target="_blank">https://nttusps.nttu.edu.tw/var/file/65/1065/img/886487933.pdf</a></li>
+  <li id="s13"><strong>[S13] 教育部主管法規查詢系統：</strong>《教育部所屬機關及學校災害防救要點》。<br><a href="https://edu.law.moe.gov.tw/LawContent.aspx?id=FL027706" target="_blank">https://edu.law.moe.gov.tw/LawContent.aspx?id=FL027706</a></li>
+</ol>
+
+<div class="signature">
+  <p>本報告供國立彰化特殊教育學校宿舍緊急求助鈴系統建置規劃、採購前評估、校內會議與設計溝通使用。實際發包與施工前，請以最新法規版本、建築師或專業技師簽證、彰化縣政府建設處無障礙勘檢要求及學校內部審查意見為準。</p>
+</div>
+</div>
+</body>
+</html>
