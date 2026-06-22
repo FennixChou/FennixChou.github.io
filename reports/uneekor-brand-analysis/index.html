@@ -3,209 +3,464 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Uneekor 品牌分析｜顧問簡報版</title>
+  <title>Uneekor 品牌分析｜策略顧問版</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg:#121826; --panel:#182033; --panel2:#202944; --text:#e7ecf7; --muted:#96a0b8;
-      --line:rgba(255,255,255,.08); --accent:#7dd3fc; --accent2:#fbbf24; --good:#86efac; --warn:#fdba74;
-      --danger:#fca5a5; --shadow:0 18px 50px rgba(0,0,0,.34); --radius:20px;
+      --bg: #ffffff;
+      --surface: #f4f4f4;
+      --surface-2: #edf5ff;
+      --text: #161616;
+      --muted: #525252;
+      --border: #d8d8d8;
+      --line: #e6e6e6;
+      --accent: #0f62fe;
+      --accent-2: #0d8bd9;
+      --good: #24a148;
+      --warn: #f1c21b;
+      --danger: #da1e28;
+      --shadow: 0 18px 50px rgba(0,0,0,.08);
+      --radius: 18px;
+      --radius-sm: 12px;
+      --max: 1240px;
     }
-    *{box-sizing:border-box}
-    body{margin:0;background:
-      radial-gradient(circle at top left, rgba(125,211,252,.10), transparent 30%),
-      radial-gradient(circle at top right, rgba(251,191,36,.08), transparent 28%),
-      linear-gradient(180deg, #0f1624 0%, var(--bg) 100%);
-      color:var(--text);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC","Microsoft JhengHei",sans-serif;line-height:1.6}
-    .wrap{max-width:1200px;margin:0 auto;padding:28px 20px 56px}
-    .hero{padding:34px;border:1px solid var(--line);border-radius:28px;background:linear-gradient(135deg, rgba(255,255,255,.06), rgba(255,255,255,.03));box-shadow:var(--shadow)}
-    .eyebrow{display:inline-flex;gap:8px;align-items:center;padding:7px 12px;border-radius:999px;background:rgba(125,211,252,.12);color:var(--accent);font-size:.8rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
-    h1{margin:14px 0 10px;font-size:clamp(2rem,4.2vw,3.6rem);line-height:1.08}
-    .sub{max-width:980px;color:var(--muted);font-size:1.02rem}
-    .meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
-    .chip{padding:8px 12px;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.04);color:var(--text);font-size:.9rem}
-    .grid{display:grid;gap:16px}
-    .kpis{grid-template-columns:repeat(4,minmax(0,1fr));margin-top:18px}
-    .card,.section{background:rgba(255,255,255,.035);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
-    .card{padding:18px}
-    .label{color:var(--muted);font-size:.88rem}
-    .value{margin-top:8px;font-size:1.35rem;font-weight:800;color:var(--accent)}
-    .small{color:var(--muted);font-size:.92rem}
-    .section{padding:24px;margin-top:18px}
-    .section h2{margin:0 0 10px;font-size:1.4rem}
-    p{margin:8px 0}
-    .two{display:grid;grid-template-columns:1.15fr .85fr;gap:16px}
-    .pill{display:inline-block;padding:4px 10px;border-radius:999px;font-size:.8rem;font-weight:800}
-    .p-accent{background:rgba(125,211,252,.14);color:var(--accent)}
-    .p-good{background:rgba(134,239,172,.12);color:var(--good)}
-    .p-warn{background:rgba(251,191,36,.14);color:var(--accent2)}
-    .p-danger{background:rgba(252,165,165,.14);color:var(--danger)}
-    .table-wrap{overflow-x:auto;border-radius:16px;border:1px solid var(--line)}
-    table{width:100%;min-width:900px;border-collapse:collapse;background:rgba(255,255,255,.02)}
-    th,td{padding:13px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
-    th{background:rgba(255,255,255,.05);font-size:.9rem}
-    ul,ol{margin:10px 0 0 20px}
-    li{margin:6px 0}
-    .bars{display:grid;gap:12px}
-    .barrow{display:grid;grid-template-columns:150px 1fr 60px;gap:10px;align-items:center}
-    .bar{height:12px;border-radius:999px;background:#0d1220;border:1px solid var(--line);overflow:hidden}
-    .fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--accent),#a78bfa)}
-    .fill.gold{background:linear-gradient(90deg,var(--accent2),#fb7185)}
-    .fill.green{background:linear-gradient(90deg,var(--good),#34d399)}
-    .fill.blue{background:linear-gradient(90deg,#60a5fa,var(--accent))}
-    .callout{padding:16px 18px;border-left:4px solid var(--accent2);background:rgba(251,191,36,.08);border-radius:14px}
-    .swot{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
-    .box{padding:16px;border-radius:16px;background:var(--panel2);border:1px solid var(--line)}
-    .box h3{margin:0 0 8px}
-    footer{text-align:center;color:var(--muted);padding:18px 0 0;font-size:.94rem}
-    .footer-note{margin-top:14px;color:var(--muted);font-size:.88rem}
-    @media (max-width: 980px){.kpis,.two,.swot{grid-template-columns:1fr}.hero{padding:22px}.section{padding:18px}}
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at top right, rgba(15,98,254,.08), transparent 24%),
+        radial-gradient(circle at 0% 20%, rgba(15,98,254,.05), transparent 28%),
+        var(--bg);
+      color: var(--text);
+      font-family: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', Roboto, 'Noto Sans TC', sans-serif;
+      line-height: 1.7;
+      text-rendering: optimizeLegibility;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .wrap { max-width: var(--max); margin: 0 auto; padding: 28px 20px 56px; }
+    .header {
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: linear-gradient(180deg, #fff 0%, #fbfbfb 100%);
+      box-shadow: var(--shadow);
+      padding: 34px 32px 28px;
+    }
+    .kicker {
+      display:inline-flex; align-items:center; gap:8px;
+      font-size: .78rem; letter-spacing: .16em; text-transform: uppercase; font-weight: 700;
+      color: var(--accent);
+    }
+    .kicker:before { content:''; width: 10px; height: 10px; border-radius: 50%; background: var(--accent); display:inline-block; }
+    h1 { margin: 12px 0 12px; font-size: clamp(2.1rem, 4vw, 3.7rem); line-height: 1.05; letter-spacing: -0.03em; }
+    .lede { max-width: 980px; color: var(--muted); font-size: 1.05rem; margin: 0; }
+    .meta {
+      display:flex; flex-wrap:wrap; gap:10px; margin-top: 18px;
+    }
+    .tag {
+      display:inline-flex; align-items:center; gap:8px;
+      padding: 8px 12px; border: 1px solid var(--border); border-radius: 999px;
+      background: #fff; font-size: .9rem; color: var(--text);
+    }
+    .tag b { font-weight: 600; }
+    .grid { display:grid; gap: 16px; }
+    .four { grid-template-columns: repeat(4, minmax(0, 1fr)); margin-top: 18px; }
+    .two { grid-template-columns: 1.2fr .8fr; }
+    .three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .card, .section {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .card { padding: 18px; }
+    .metric { font-size: 1.55rem; font-weight: 700; letter-spacing: -0.02em; margin-top: 6px; }
+    .metric.accent { color: var(--accent); }
+    .metric.good { color: var(--good); }
+    .metric.warn { color: #977300; }
+    .metric.danger { color: var(--danger); }
+    .label { font-size: .86rem; color: var(--muted); }
+    .small { color: var(--muted); font-size: .93rem; }
+    .section { padding: 26px; margin-top: 18px; }
+    .section h2 { margin: 0 0 10px; font-size: 1.4rem; letter-spacing: -0.02em; }
+    .section h3 { margin: 0 0 8px; font-size: 1.04rem; }
+    p { margin: 8px 0; }
+    .lead-quote {
+      padding: 18px 18px 18px 20px;
+      border-left: 4px solid var(--accent);
+      background: var(--surface-2);
+      border-radius: 14px;
+      font-size: 1rem;
+    }
+    .callout {
+      padding: 16px 18px;
+      border: 1px solid #c8dafc;
+      background: #f7fbff;
+      border-radius: 14px;
+    }
+    .callout strong { color: var(--text); }
+    .table-wrap {
+      overflow-x: auto;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: #fff;
+    }
+    table { width: 100%; min-width: 920px; border-collapse: collapse; }
+    th, td {
+      padding: 14px 12px;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+      text-align: left;
+    }
+    th {
+      background: #fafafa;
+      font-size: .9rem;
+      color: #111;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+    tr:hover td { background: #fcfcfc; }
+    ul, ol { margin: 10px 0 0 20px; }
+    li { margin: 7px 0; }
+    .pill {
+      display: inline-flex; align-items:center; gap: 6px;
+      padding: 4px 10px; border-radius: 999px; font-size: .78rem; font-weight: 700;
+    }
+    .p-blue { background: #edf5ff; color: var(--accent); }
+    .p-green { background: #defbe6; color: var(--good); }
+    .p-amber { background: #fff4ce; color: #8a6000; }
+    .p-red { background: #ffe5e5; color: var(--danger); }
+    .bars { display:grid; gap: 12px; }
+    .bar-row { display:grid; grid-template-columns: 160px 1fr 54px; gap: 10px; align-items:center; }
+    .bar-bg {
+      height: 12px; border-radius: 999px; background: #f1f1f1; border: 1px solid #e2e2e2; overflow: hidden;
+    }
+    .bar-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--accent), #7bb0ff); }
+    .bar-fill.alt { background: linear-gradient(90deg, #24a148, #7fe5a0); }
+    .bar-fill.gold { background: linear-gradient(90deg, #f1c21b, #f39b2f); }
+    .bar-fill.dark { background: linear-gradient(90deg, #525252, #8d8d8d); }
+    .swot { display:grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    .box {
+      padding: 16px;
+      border-radius: 14px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+    }
+    .mini-grid { display:grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .map {
+      position: relative;
+      height: 330px;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background:
+        linear-gradient(to right, transparent calc(50% - 0.5px), #ddd calc(50% - 0.5px), #ddd calc(50% + 0.5px), transparent calc(50% + 0.5px)),
+        linear-gradient(to top, transparent calc(50% - 0.5px), #ddd calc(50% - 0.5px), #ddd calc(50% + 0.5px), transparent calc(50% + 0.5px)),
+        linear-gradient(180deg, #fff, #fafafa);
+      overflow: hidden;
+    }
+    .map .label-x, .map .label-y {
+      position: absolute; font-size: .84rem; color: var(--muted);
+      background: #fff; padding: 0 8px;
+    }
+    .map .label-x { bottom: 10px; right: 12px; }
+    .map .label-y { top: 10px; left: 12px; transform: rotate(-90deg); transform-origin: left top; }
+    .dot {
+      position: absolute; width: 14px; height: 14px; border-radius: 50%; border: 2px solid #fff;
+      box-shadow: 0 6px 16px rgba(0,0,0,.14);
+    }
+    .dot span {
+      position:absolute; left: 18px; top: -7px; white-space: nowrap; font-size: .84rem; font-weight: 600;
+      background: rgba(255,255,255,.9); padding: 2px 6px; border-radius: 999px; border: 1px solid #eee;
+    }
+    .dot.uneekor { background: var(--accent); left: 60%; top: 33%; }
+    .dot.foresight { background: #f39b2f; left: 56%; top: 18%; }
+    .dot.trackman { background: #111; left: 77%; top: 14%; }
+    .dot.skytrak { background: #24a148; left: 31%; top: 66%; }
+    .dot.rapsodo { background: #8e61ff; left: 24%; top: 73%; }
+    .dot span small { color: var(--muted); font-weight: 400; }
+    .source-list li { margin: 6px 0; }
+    footer {
+      margin-top: 20px; padding: 18px 0 0; text-align: center; color: var(--muted); font-size: .94rem;
+    }
+    .footer-note { color: var(--muted); font-size: .88rem; margin-top: 10px; }
+    .subtle {
+      font-family: 'IBM Plex Mono', ui-monospace, monospace;
+      font-size: .82rem; color: #6f6f6f;
+      letter-spacing: .02em;
+    }
+    @media (max-width: 1080px) {
+      .four, .three, .two, .swot, .mini-grid { grid-template-columns: 1fr; }
+      .header { padding: 22px; }
+      .section { padding: 20px; }
+      .bar-row { grid-template-columns: 124px 1fr 44px; }
+      .map { height: 280px; }
+    }
+    @media print {
+      body { background: #fff; }
+      .wrap { max-width: none; padding: 0; }
+      .header, .card, .section { box-shadow: none; }
+      .section { break-inside: avoid; }
+      a { color: #000; text-decoration: none; }
+    }
   </style>
 </head>
 <body>
   <div class="wrap">
-    <header class="hero">
-      <div class="eyebrow">Consulting Brief</div>
+    <header class="header">
+      <div class="kicker">Strategy / Brand Analysis</div>
       <h1>Uneekor Launch Monitor 品牌分析報告</h1>
-      <p class="sub">這是一份偏顧問簡報風格的版本：先講結論，再拆品牌定位、產品組合、商業模式、競爭位置與策略建議，方便你直接拿去簡報或做決策討論。</p>
+      <p class="lede">本版本改寫為更偏 <strong>McKinsey / BCG 風格</strong> 的策略顧問簡報：先給結論，再用可掃讀的結構拆解品牌定位、產品組合、商業模式、競爭位置與策略建議，適合直接拿去提案或內部簡報。</p>
       <div class="meta">
-        <span class="chip">日期：2026-06-22</span>
-        <span class="chip">範圍：品牌 / 產品 / 商業模式</span>
-        <span class="chip">資料來源：官網 + 第三方評測</span>
-        <span class="chip">語言：繁體中文</span>
+        <span class="tag"><b>日期</b> 2026-06-22</span>
+        <span class="tag"><b>範圍</b> 品牌 / 產品 / 商業模式 / 競爭策略</span>
+        <span class="tag"><b>語言</b> 繁體中文</span>
+        <span class="tag"><b>定位</b> 高階高爾夫模擬器與 Launch Monitor</span>
       </div>
     </header>
 
-    <section class="grid kpis">
-      <div class="card"><div class="label">品牌定位</div><div class="value">高階精準訓練 + 模擬生態</div><div class="small">不是單賣硬體，而是賣完整體驗。</div></div>
-      <div class="card"><div class="label">價格帶</div><div class="value">US$2,499–8,999</div><div class="small">覆蓋便攜入門到旗艦工作室。</div></div>
-      <div class="card"><div class="label">營收引擎</div><div class="value">硬體 + 訂閱 + 升級包</div><div class="small">把一次性買賣變成持續變現。</div></div>
-      <div class="card"><div class="label">核心心智</div><div class="value">精準、創新、社群</div><div class="small">官網敘事一致且偏科技感。</div></div>
+    <section class="grid four">
+      <div class="card">
+        <div class="label">核心判斷</div>
+        <div class="metric accent">硬體只是入口</div>
+        <div class="small">Uneekor 真正的價值在於「硬體 + 軟體 + 訂閱 + 內容」的閉環。</div>
+      </div>
+      <div class="card">
+        <div class="label">最佳客群</div>
+        <div class="metric good">高端家用 / 工作室</div>
+        <div class="small">願意為精準度、易用性與完整體驗付費的進階玩家。</div>
+      </div>
+      <div class="card">
+        <div class="label">價格帶</div>
+        <div class="metric warn">US$2.5k–8.9k</div>
+        <div class="small">覆蓋便攜型入門到旗艦天花板機種。</div>
+      </div>
+      <div class="card">
+        <div class="label">風險點</div>
+        <div class="metric danger">訂閱價值感</div>
+        <div class="small">若使用者感受不到升級差異，年費模式會成為阻力。</div>
+      </div>
     </section>
 
     <section class="section">
-      <h2>1. 執行摘要</h2>
-      <div class="two">
+      <h2>1. Executive Summary</h2>
+      <div class="two grid">
         <div>
-          <p>Uneekor 的品牌策略很清楚：用 <strong>高精準 launch monitor</strong> 當入口，再用 <strong>軟體、內容與訂閱</strong> 把使用者留在自家生態系。它的產品線從 EYE MINI LITE、EYE MINI，到 EYE XR、EYE XO、EYE XO2，形成完整的升級階梯。</p>
-          <p>從商業角度看，Uneekor 的優勢不是只有「硬體夠強」，而是它把 <strong>訓練、娛樂、第三方相容、會員制</strong> 放在同一個框架內，讓高階高爾夫模擬器變成可持續擴張的服務型生意。</p>
+          <p>Uneekor 的品牌策略可以用一句話概括：<strong>用高精準硬體建立信任，再用軟體與內容把使用者留在生態系裡。</strong> 這使它不只是 launch monitor 品牌，而是高爾夫模擬器平台。</p>
+          <p>從市場角色來看，Uneekor 並不追求最低價，而是鎖定想把家裡或工作室升級成「可訓練、可娛樂、可持續升級」的使用者。它的產品階梯清楚、軟體模組分工明確，能有效把單次購買轉化成持續性收入。</p>
         </div>
-        <div class="callout">
-          <strong>顧問結論：</strong><br />
-          Uneekor 是一個「以硬體建立信任、以軟體創造黏著、以訂閱提高 LTV」的高端 golf tech 品牌。
+        <div class="lead-quote">
+          <strong>關鍵結論：</strong><br />
+          Uneekor 的競爭力不在單一規格，而在於「精準數據 + 體驗內容 + 訂閱化」的結構性優勢。
         </div>
       </div>
     </section>
 
     <section class="section">
-      <h2>2. 品牌定位與市場角色</h2>
+      <h2>2. 品牌定位：精準、可擴充、可升級</h2>
       <div class="bars">
-        <div class="barrow"><div>精準度</div><div class="bar"><div class="fill blue" style="width:92%"></div></div><div>92</div></div>
-        <div class="barrow"><div>內容生態</div><div class="bar"><div class="fill green" style="width:88%"></div></div><div>88</div></div>
-        <div class="barrow"><div>價格門檻</div><div class="bar"><div class="fill gold" style="width:76%"></div></div><div>76</div></div>
-        <div class="barrow"><div>品牌溢價</div><div class="bar"><div class="fill blue" style="width:84%"></div></div><div>84</div></div>
+        <div class="bar-row"><div>精準度心智</div><div class="bar-bg"><div class="bar-fill" style="width:92%"></div></div><div>92</div></div>
+        <div class="bar-row"><div>產品完整度</div><div class="bar-bg"><div class="bar-fill alt" style="width:88%"></div></div><div>88</div></div>
+        <div class="bar-row"><div>品牌溢價</div><div class="bar-bg"><div class="bar-fill gold" style="width:84%"></div></div><div>84</div></div>
+        <div class="bar-row"><div>價格親和力</div><div class="bar-bg"><div class="bar-fill dark" style="width:68%"></div></div><div>68</div></div>
       </div>
-      <p style="margin-top:14px">Uneekor 主要吃的是「認真練球」的中高端客群，而不是最便宜的入門市場。它在市場上的角色介於超高端巡迴賽級與大眾入門型之間，屬於<strong>高階家用 / 教學工作室</strong>的甜蜜區。</p>
+      <p class="small" style="margin-top:10px">註：分數為策略判讀，反映市場印象與產品佈局，不是官方指標。</p>
     </section>
 
     <section class="section">
-      <h2>3. 產品矩陣與定價</h2>
+      <h2>3. 產品組合與定價邏輯</h2>
       <div class="table-wrap">
         <table>
           <thead>
-            <tr><th>產品</th><th>型態</th><th>官方價格</th><th>定位</th><th>一句話</th></tr>
+            <tr>
+              <th>產品</th>
+              <th>型態</th>
+              <th>官方價格</th>
+              <th>戰略角色</th>
+              <th>重點訊號</th>
+            </tr>
           </thead>
           <tbody>
-            <tr><td><strong>EYE XO2</strong></td><td>天花板固定式 / 3 高速攝影機</td><td>US$8,999</td><td><span class="pill p-accent">旗艦</span></td><td>最大擊球區與最高規格。</td></tr>
-            <tr><td><strong>EYE XO</strong></td><td>天花板固定式 / 雙高速攝影機</td><td>US$5,999</td><td><span class="pill p-good">高階主力</span></td><td>工作室與高端家庭的平衡點。</td></tr>
-            <tr><td><strong>EYE XR</strong></td><td>後置式 / 紅外精準</td><td>US$5,499</td><td><span class="pill p-good">明星產品</span></td><td>安裝自由度高，最容易被理解。</td></tr>
-            <tr><td><strong>EYE MINI</strong></td><td>便攜式 / 室內外皆可</td><td>US$2,999 起</td><td><span class="pill p-warn">成長型入口</span></td><td>便攜與精準兼顧。</td></tr>
-            <tr><td><strong>EYE MINI LITE</strong></td><td>便攜式 / 簡化入門</td><td>US$2,499 起</td><td><span class="pill p-warn">入門引流</span></td><td>用較低門檻擴大受眾。</td></tr>
+            <tr>
+              <td><strong>EYE XO2</strong></td>
+              <td>天花板固定式，3 顆高速攝影機</td>
+              <td>US$8,999</td>
+              <td><span class="pill p-blue">旗艦</span></td>
+              <td>最大擊球區、最高規格，代表品牌上限。</td>
+            </tr>
+            <tr>
+              <td><strong>EYE XO</strong></td>
+              <td>天花板固定式，雙高速攝影機</td>
+              <td>US$5,999</td>
+              <td><span class="pill p-green">高階主力</span></td>
+              <td>最適合高端家庭與教學空間的平衡點。</td>
+            </tr>
+            <tr>
+              <td><strong>EYE XR</strong></td>
+              <td>後置式，紅外追蹤</td>
+              <td>US$5,499</td>
+              <td><span class="pill p-green">明星產品</span></td>
+              <td>兼顧安裝自由度與專業感，容易被理解。</td>
+            </tr>
+            <tr>
+              <td><strong>EYE MINI</strong></td>
+              <td>便攜式，室內 / 室外可用</td>
+              <td>US$2,999 起</td>
+              <td><span class="pill p-amber">成長入口</span></td>
+              <td>用較低門檻切入，建立升級路徑。</td>
+            </tr>
+            <tr>
+              <td><strong>EYE MINI LITE</strong></td>
+              <td>便攜式入門</td>
+              <td>US$2,499 起</td>
+              <td><span class="pill p-amber">引流產品</span></td>
+              <td>擴大受眾、降低首次採購心理門檻。</td>
+            </tr>
           </tbody>
         </table>
       </div>
-      <p class="small" style="margin-top:10px">重點：Uneekor 的產品階梯很完整，能讓用戶從「先買得起」走到「再升級」。</p>
+      <div class="mini-grid" style="margin-top:14px;">
+        <div class="callout"><strong>結論 A：</strong> Uneekor 的產品梯階很完整，適合做「先買得起、再升級」的路徑設計。</div>
+        <div class="callout"><strong>結論 B：</strong> 品牌並未向低價市場下探，而是把便攜款作為高階生態入口。</div>
+      </div>
     </section>
 
     <section class="section">
-      <h2>4. 商業模式：硬體只是起點</h2>
-      <div class="two">
+      <h2>4. 商業模式：從硬體銷售走向平台化</h2>
+      <div class="two grid">
         <div>
-          <p>Uneekor 的軟體與訂閱設計，是整個品牌最關鍵的護城河。官網將 <strong>VIEW</strong>、<strong>REFINE / REFINE+</strong>、<strong>GameDay</strong>、<strong>AI Trainer</strong>、<strong>Launcher</strong> 放在同一個敘事中，表示它不是把軟體當附屬配件，而是核心收入來源之一。</p>
+          <h3>軟體是護城河，不是附屬品</h3>
+          <p>Uneekor 將 <strong>VIEW</strong>、<strong>REFINE / REFINE+</strong>、<strong>GameDay</strong>、<strong>AI Trainer</strong> 與 <strong>Launcher</strong> 做成一套完整的內容與工具組合，目的是把硬體價值轉化為持續性使用。</p>
           <ul>
-            <li><strong>VIEW：</strong>訓練與數據分析核心。</li>
-            <li><strong>REFINE / REFINE+</strong>：偏模擬球場與競技遊玩。</li>
-            <li><strong>GameDay：</strong>娛樂與競賽取向。</li>
-            <li><strong>AI Trainer：</strong>把數據變成即時教練回饋。</li>
-            <li><strong>第三方相容：</strong>保留 GSPro / E6 類平台延伸性。</li>
+            <li><strong>VIEW：</strong>即時數據與訓練核心。</li>
+            <li><strong>REFINE / REFINE+：</strong>偏球場模擬與競技體驗。</li>
+            <li><strong>GameDay：</strong>娛樂、競賽與沉浸式內容。</li>
+            <li><strong>AI Trainer：</strong>將數據轉為即時教練回饋。</li>
+            <li><strong>Third Party Compatibility：</strong>保留 GSPro / E6 等延伸性。</li>
           </ul>
         </div>
         <div>
           <div class="table-wrap">
             <table style="min-width:0">
-              <thead><tr><th>方案</th><th>費用</th><th>權益</th></tr></thead>
+              <thead>
+                <tr><th>方案</th><th>年費</th><th>主要增值</th></tr>
+              </thead>
               <tbody>
-                <tr><td><strong>Player</strong></td><td>US$0</td><td>基本訓練、單人檔案</td></tr>
-                <tr><td><strong>Pro</strong></td><td>US$199 / 年</td><td>多檔案、第三方軟體、更多報告</td></tr>
-                <tr><td><strong>Champion</strong></td><td>US$399 / 年</td><td>50 profiles、AI Trainer、REFINE+ 擴充</td></tr>
-                <tr><td><strong>Ultimate Best</strong></td><td>US$599 / 年</td><td>GameDay 完整存取</td></tr>
+                <tr><td><strong>Player</strong></td><td>US$0</td><td>基礎訓練 / 單一檔案</td></tr>
+                <tr><td><strong>Pro</strong></td><td>US$199</td><td>多檔案 / 第三方軟體 / 更多報告</td></tr>
+                <tr><td><strong>Champion</strong></td><td>US$399</td><td>50 profiles / AI Trainer / REFINE+</td></tr>
+                <tr><td><strong>Ultimate Best</strong></td><td>US$599</td><td>GameDay 完整權限</td></tr>
               </tbody>
             </table>
           </div>
-          <p class="small" style="margin-top:10px">這種分層設計的目的很明確：把高價值用戶逐步導向更高 ARPU。</p>
+          <p class="small" style="margin-top:10px">顯示出非常典型的平台商業模式：用免費層做獲客，用中階訂閱做升級，用高階訂閱鎖定重度用戶。</p>
         </div>
       </div>
     </section>
 
     <section class="section">
-      <h2>5. SWOT 分析</h2>
+      <h2>5. 競爭位置：介於專業標竿與大眾入門之間</h2>
+      <div class="map">
+        <div class="label-y">高精準 / 高價格</div>
+        <div class="label-x">高可負擔 / 低門檻</div>
+        <div class="dot trackman"><span>TrackMan<br><small>巡迴賽級標竿</small></span></div>
+        <div class="dot foresight"><span>Foresight<br><small>精準度與品牌力</small></span></div>
+        <div class="dot uneekor"><span>Uneekor<br><small>高階可擴充平台</small></span></div>
+        <div class="dot skytrak"><span>SkyTrak<br><small>入門 / 家用</small></span></div>
+        <div class="dot rapsodo"><span>Rapsodo<br><small>便攜 / 初階</small></span></div>
+      </div>
+      <p class="small" style="margin-top:10px">Uneekor 的位置感很清楚：它不是最便宜的，但比純專業標竿更容易進入家庭與工作室市場。</p>
+    </section>
+
+    <section class="section">
+      <h2>6. SWOT：策略機會與風險</h2>
       <div class="swot">
-        <div class="box"><h3>Strengths｜優勢</h3><ul><li>產品線完整，覆蓋多價格帶</li><li>硬體 + 軟體閉環，黏著度高</li><li>品牌敘事一致，科技感強</li></ul></div>
-        <div class="box"><h3>Weaknesses｜弱點</h3><ul><li>價格仍偏高，對新手有門檻</li><li>訂閱制可能引發反感</li><li>高階市場競品心智很強</li></ul></div>
-        <div class="box"><h3>Opportunities｜機會</h3><ul><li>高爾夫模擬器家用市場持續成長</li><li>AI 教練與數據化訓練需求上升</li><li>內容服務可持續加值</li></ul></div>
-        <div class="box"><h3>Threats｜威脅</h3><ul><li>競品持續降價或推出更高 CP 值產品</li><li>第三方內容平台分走注意力</li><li>安裝與售後體驗直接影響口碑</li></ul></div>
+        <div class="box">
+          <h3>Strengths｜優勢</h3>
+          <ul>
+            <li>產品線完整，覆蓋多個價格層</li>
+            <li>軟硬整合，能提高用戶黏著</li>
+            <li>品牌敘事一致，科技感與專業感兼具</li>
+          </ul>
+        </div>
+        <div class="box">
+          <h3>Weaknesses｜弱點</h3>
+          <ul>
+            <li>價格仍偏高，新客門檻不低</li>
+            <li>訂閱制的價值感需持續被證明</li>
+            <li>高階競品心智仍然很強</li>
+          </ul>
+        </div>
+        <div class="box">
+          <h3>Opportunities｜機會</h3>
+          <ul>
+            <li>居家高爾夫模擬器需求持續成長</li>
+            <li>AI 訓練與個人化教學擴張</li>
+            <li>內容服務可逐步提高 ARPU</li>
+          </ul>
+        </div>
+        <div class="box">
+          <h3>Threats｜威脅</h3>
+          <ul>
+            <li>競品降價或推更高 CP 值產品</li>
+            <li>第三方平台分散使用者注意力</li>
+            <li>安裝、售後與體驗口碑影響很大</li>
+          </ul>
+        </div>
       </div>
     </section>
 
     <section class="section">
-      <h2>6. 競爭位置判讀</h2>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>競品</th><th>市場印象</th><th>與 Uneekor 的差異</th></tr></thead>
-          <tbody>
-            <tr><td><strong>TrackMan</strong></td><td>巡迴賽級標竿</td><td>TrackMan 是天花板，Uneekor 是可負擔的高階方案。</td></tr>
-            <tr><td><strong>Foresight</strong></td><td>精準與品牌力強</td><td>Uneekor 在軟體整合與價格階梯上更彈性。</td></tr>
-            <tr><td><strong>SkyTrak / Rapsodo</strong></td><td>較偏入門與普及</td><td>Uneekor 更高一階，走進階玩家與工作室市場。</td></tr>
-          </tbody>
-        </table>
+      <h2>7. 策略建議：三個優先方向</h2>
+      <div class="grid three">
+        <div class="card">
+          <div class="pill p-blue">Priority 1</div>
+          <h3 style="margin-top:10px">把訂閱價值說清楚</h3>
+          <p class="small">讓使用者明白各級方案到底增加了什麼，降低「買完還要付費」的心理阻力。</p>
+        </div>
+        <div class="card">
+          <div class="pill p-green">Priority 2</div>
+          <h3 style="margin-top:10px">把 MINI 當成入口</h3>
+          <p class="small">用便攜型產品吸引首次購買，再透過升級包與高階功能提高 LTV。</p>
+        </div>
+        <div class="card">
+          <div class="pill p-amber">Priority 3</div>
+          <h3 style="margin-top:10px">強化安裝與售後體驗</h3>
+          <p class="small">高單價硬體的口碑高度依賴落地服務、設定便利性與回應速度。</p>
+        </div>
       </div>
-      <p>第三方評測普遍認為 Uneekor 的高階機種在準確度與使用體驗上很有競爭力，尤其是 <strong>EYE MINI / EYE XR / QED</strong> 類產品，常被放進與更昂貴機器的比較框架中。</p>
-    </section>
-
-    <section class="section">
-      <h2>7. 策略建議</h2>
-      <ol>
-        <li><strong>把軟體價值說得更直白：</strong>讓消費者一眼看懂訂閱升級到底多了什麼。</li>
-        <li><strong>以 MINI / MINI LITE 當入口：</strong>先拉新，再透過升級包與內容做變現。</li>
-        <li><strong>提升安裝與售後體驗：</strong>高單價商品的口碑高度依賴落地服務。</li>
-        <li><strong>把第三方相容性當賣點：</strong>避免被視為封閉系統。</li>
-        <li><strong>分層訊息再清楚一點：</strong>幫消費者快速判斷 XO2、XO、XR、MINI 的差異。</li>
+      <ol style="margin-top:14px;">
+        <li><strong>清楚分層：</strong>把 XO2 / XO / XR / MINI / MINI LITE 的差異用更一致的語言表達。</li>
+        <li><strong>保持開放性：</strong>第三方相容性是品牌賣點，不是妥協。</li>
+        <li><strong>設計升級路徑：</strong>讓消費者知道「現在買什麼、未來怎麼升級」。</li>
       </ol>
     </section>
 
     <section class="section">
       <h2>8. 結論</h2>
-      <p>Uneekor 最強的地方，不是單一產品，而是它已經把「硬體、軟體、內容、訂閱」串成一套完整商業模型。對使用者來說，它代表的是更完整的高爾夫模擬體驗；對品牌來說，它代表的是更長的變現鏈與更高的客戶終身價值。</p>
-      <p>若用一句話總結：<strong>Uneekor 是一個成功把 launch monitor 做成平台型生意的品牌。</strong></p>
+      <div class="lead-quote">
+        Uneekor 的核心能力不在單一產品，而在於把 launch monitor 做成一個可擴充的平台。它的成功，來自於高精準硬體建立信任、軟體內容提高使用頻率、訂閱模式拉長商業生命週期。
+      </div>
+      <p>如果用顧問語言總結：<strong>Uneekor 已經從「賣機器」進化成「賣高爾夫模擬體驗的平台」</strong>。這就是它最重要的品牌資產，也是未來繼續放大的基礎。</p>
     </section>
 
     <section class="section">
       <h2>資料來源</h2>
-      <ul>
-        <li>Uneekor About、Launch Monitors、Software、產品頁</li>
-        <li>Plugged In Golf：EYE MINI Review</li>
-        <li>Golf Simulator Advisor：EYE XR / QED Review</li>
+      <ul class="source-list">
+        <li><a href="https://uneekor.com/about" target="_blank" rel="noopener noreferrer">Uneekor About</a></li>
+        <li><a href="https://uneekor.com/collections/launch-monitors" target="_blank" rel="noopener noreferrer">Uneekor Launch Monitors</a></li>
+        <li><a href="https://uneekor.com/golf-simulator-software" target="_blank" rel="noopener noreferrer">Uneekor Software</a></li>
+        <li><a href="https://uneekor.com/golf-launch-monitors/eye-xo2" target="_blank" rel="noopener noreferrer">EYE XO2</a></li>
+        <li><a href="https://uneekor.com/golf-launch-monitors/eye-xo" target="_blank" rel="noopener noreferrer">EYE XO</a></li>
+        <li><a href="https://uneekor.com/golf-launch-monitors/eye-xr" target="_blank" rel="noopener noreferrer">EYE XR</a></li>
+        <li><a href="https://uneekor.com/golf-launch-monitors/eye-mini" target="_blank" rel="noopener noreferrer">EYE MINI</a></li>
+        <li><a href="https://uneekor.com/golf-launch-monitors/eye-mini-lite" target="_blank" rel="noopener noreferrer">EYE MINI LITE</a></li>
+        <li><a href="https://pluggedingolf.com/uneekor-eye-mini-launch-monitor-review/" target="_blank" rel="noopener noreferrer">Plugged In Golf：EYE MINI Review</a></li>
+        <li><a href="https://golfsimulatoradvisor.com/uneekor-eye-xr-launch-monitor-review/" target="_blank" rel="noopener noreferrer">Golf Simulator Advisor：EYE XR Review</a></li>
+        <li><a href="https://golfsimulatoradvisor.com/uneekor-qed-launch-monitor-review/" target="_blank" rel="noopener noreferrer">Golf Simulator Advisor：QED Review</a></li>
       </ul>
-      <div class="footer-note">註：價格與方案內容會隨官網更新而變動，實際採購請以官方頁面為準。</div>
+      <div class="footer-note">註：價格與方案內容會隨官方頁面更新而變動；本報告以策略分析為目的，不構成採購建議。</div>
     </section>
 
     <footer>Generated by Hermes Agent</footer>
