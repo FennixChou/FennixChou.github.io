@@ -3,399 +3,209 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Uneekor Launch Monitor 品牌分析報告</title>
+  <title>Uneekor 品牌分析｜顧問簡報版</title>
   <style>
     :root {
-      --bg: #1a1a2e;
-      --panel: #22223b;
-      --panel-2: #2d2d4f;
-      --text: #e0e0e0;
-      --muted: #a9acc7;
-      --accent: #7ee0ff;
-      --accent-2: #f8c954;
-      --success: #72e6a7;
-      --warn: #ffcc66;
-      --danger: #ff8e8e;
-      --border: rgba(255,255,255,.09);
-      --shadow: 0 12px 40px rgba(0,0,0,.35);
-      --radius: 18px;
+      --bg:#121826; --panel:#182033; --panel2:#202944; --text:#e7ecf7; --muted:#96a0b8;
+      --line:rgba(255,255,255,.08); --accent:#7dd3fc; --accent2:#fbbf24; --good:#86efac; --warn:#fdba74;
+      --danger:#fca5a5; --shadow:0 18px 50px rgba(0,0,0,.34); --radius:20px;
     }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
-      background:
-        radial-gradient(circle at top left, rgba(126,224,255,.12), transparent 28%),
-        radial-gradient(circle at top right, rgba(248,201,84,.10), transparent 28%),
-        var(--bg);
-      color: var(--text);
-      line-height: 1.7;
-    }
-    a { color: var(--accent); text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    .wrap { max-width: 1180px; margin: 0 auto; padding: 32px 20px 56px; }
-    .hero {
-      background: linear-gradient(135deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
-      border: 1px solid var(--border);
-      border-radius: 24px;
-      padding: 34px 28px;
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(8px);
-    }
-    .eyebrow { color: var(--accent-2); letter-spacing: .12em; text-transform: uppercase; font-size: .78rem; font-weight: 700; }
-    h1 { margin: 10px 0 14px; font-size: clamp(2rem, 4vw, 3.4rem); line-height: 1.15; }
-    .subtitle { color: var(--muted); max-width: 920px; font-size: 1.03rem; }
-    .meta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
-    .chip {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 8px 12px; border-radius: 999px; background: rgba(255,255,255,.06);
-      border: 1px solid var(--border); color: var(--text); font-size: .92rem;
-    }
-    .grid { display: grid; gap: 18px; margin-top: 18px; }
-    .grid.cards { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-    .card, .section {
-      background: rgba(255,255,255,.04);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-    }
-    .card { padding: 18px; }
-    .card h3, .section h2 { margin: 0 0 10px; }
-    .card .value { font-size: 1.55rem; font-weight: 800; color: var(--accent); }
-    .card .label { color: var(--muted); font-size: .92rem; }
-    .section { padding: 24px; margin-top: 18px; }
-    .section h2 { font-size: 1.45rem; }
-    .section p, .section li, .section td { color: var(--text); }
-    .muted { color: var(--muted); }
-    .two-col { display: grid; grid-template-columns: 1.2fr .8fr; gap: 18px; }
-    .table-wrap { overflow-x: auto; border-radius: 16px; border: 1px solid var(--border); }
-    table { width: 100%; border-collapse: collapse; min-width: 860px; background: rgba(255,255,255,.03); }
-    th, td { padding: 14px 12px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--border); }
-    th { background: rgba(255,255,255,.05); font-size: .92rem; color: #fff; }
-    tr:hover td { background: rgba(126,224,255,.04); }
-    .badge { display:inline-block; padding: 4px 10px; border-radius: 999px; font-size: .8rem; font-weight: 700; }
-    .b-accent { background: rgba(126,224,255,.14); color: var(--accent); }
-    .b-warn { background: rgba(248,201,84,.14); color: var(--warn); }
-    .b-success { background: rgba(114,230,167,.14); color: var(--success); }
-    .b-danger { background: rgba(255,142,142,.14); color: var(--danger); }
-    .list { margin: 10px 0 0 20px; }
-    .list li { margin: 7px 0; }
-    .swot { display:grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 14px; }
-    .swot .box { padding: 16px; border-radius: 16px; background: var(--panel); border: 1px solid var(--border); }
-    .swot h3 { margin: 0 0 8px; }
-    code, pre { background: #10111f; border: 1px solid var(--border); border-radius: 12px; }
-    pre { overflow:auto; padding: 14px; }
-    code { padding: 2px 6px; }
-    .note { padding: 14px 16px; border-left: 4px solid var(--accent-2); background: rgba(248,201,84,.08); border-radius: 12px; color: var(--text); }
-    footer { margin-top: 20px; padding: 18px 6px 0; color: var(--muted); text-align: center; font-size: .94rem; }
-    .small { font-size: .92rem; }
-    @media (max-width: 980px) {
-      .grid.cards, .two-col, .swot { grid-template-columns: 1fr; }
-      .hero { padding: 24px 18px; }
-      .section { padding: 18px; }
-    }
+    *{box-sizing:border-box}
+    body{margin:0;background:
+      radial-gradient(circle at top left, rgba(125,211,252,.10), transparent 30%),
+      radial-gradient(circle at top right, rgba(251,191,36,.08), transparent 28%),
+      linear-gradient(180deg, #0f1624 0%, var(--bg) 100%);
+      color:var(--text);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC","Microsoft JhengHei",sans-serif;line-height:1.6}
+    .wrap{max-width:1200px;margin:0 auto;padding:28px 20px 56px}
+    .hero{padding:34px;border:1px solid var(--line);border-radius:28px;background:linear-gradient(135deg, rgba(255,255,255,.06), rgba(255,255,255,.03));box-shadow:var(--shadow)}
+    .eyebrow{display:inline-flex;gap:8px;align-items:center;padding:7px 12px;border-radius:999px;background:rgba(125,211,252,.12);color:var(--accent);font-size:.8rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+    h1{margin:14px 0 10px;font-size:clamp(2rem,4.2vw,3.6rem);line-height:1.08}
+    .sub{max-width:980px;color:var(--muted);font-size:1.02rem}
+    .meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+    .chip{padding:8px 12px;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.04);color:var(--text);font-size:.9rem}
+    .grid{display:grid;gap:16px}
+    .kpis{grid-template-columns:repeat(4,minmax(0,1fr));margin-top:18px}
+    .card,.section{background:rgba(255,255,255,.035);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+    .card{padding:18px}
+    .label{color:var(--muted);font-size:.88rem}
+    .value{margin-top:8px;font-size:1.35rem;font-weight:800;color:var(--accent)}
+    .small{color:var(--muted);font-size:.92rem}
+    .section{padding:24px;margin-top:18px}
+    .section h2{margin:0 0 10px;font-size:1.4rem}
+    p{margin:8px 0}
+    .two{display:grid;grid-template-columns:1.15fr .85fr;gap:16px}
+    .pill{display:inline-block;padding:4px 10px;border-radius:999px;font-size:.8rem;font-weight:800}
+    .p-accent{background:rgba(125,211,252,.14);color:var(--accent)}
+    .p-good{background:rgba(134,239,172,.12);color:var(--good)}
+    .p-warn{background:rgba(251,191,36,.14);color:var(--accent2)}
+    .p-danger{background:rgba(252,165,165,.14);color:var(--danger)}
+    .table-wrap{overflow-x:auto;border-radius:16px;border:1px solid var(--line)}
+    table{width:100%;min-width:900px;border-collapse:collapse;background:rgba(255,255,255,.02)}
+    th,td{padding:13px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+    th{background:rgba(255,255,255,.05);font-size:.9rem}
+    ul,ol{margin:10px 0 0 20px}
+    li{margin:6px 0}
+    .bars{display:grid;gap:12px}
+    .barrow{display:grid;grid-template-columns:150px 1fr 60px;gap:10px;align-items:center}
+    .bar{height:12px;border-radius:999px;background:#0d1220;border:1px solid var(--line);overflow:hidden}
+    .fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--accent),#a78bfa)}
+    .fill.gold{background:linear-gradient(90deg,var(--accent2),#fb7185)}
+    .fill.green{background:linear-gradient(90deg,var(--good),#34d399)}
+    .fill.blue{background:linear-gradient(90deg,#60a5fa,var(--accent))}
+    .callout{padding:16px 18px;border-left:4px solid var(--accent2);background:rgba(251,191,36,.08);border-radius:14px}
+    .swot{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+    .box{padding:16px;border-radius:16px;background:var(--panel2);border:1px solid var(--line)}
+    .box h3{margin:0 0 8px}
+    footer{text-align:center;color:var(--muted);padding:18px 0 0;font-size:.94rem}
+    .footer-note{margin-top:14px;color:var(--muted);font-size:.88rem}
+    @media (max-width: 980px){.kpis,.two,.swot{grid-template-columns:1fr}.hero{padding:22px}.section{padding:18px}}
   </style>
 </head>
 <body>
   <div class="wrap">
     <header class="hero">
-      <div class="eyebrow">Brand Analysis Report</div>
+      <div class="eyebrow">Consulting Brief</div>
       <h1>Uneekor Launch Monitor 品牌分析報告</h1>
-      <p class="subtitle">本報告聚焦 Uneekor 在高階居家／商用高爾夫模擬器市場的品牌定位、產品組合、商業模式與競爭態勢，並基於官方網站與第三方評測整理出優勢、風險與策略建議。</p>
+      <p class="sub">這是一份偏顧問簡報風格的版本：先講結論，再拆品牌定位、產品組合、商業模式、競爭位置與策略建議，方便你直接拿去簡報或做決策討論。</p>
       <div class="meta">
-        <span class="chip">報告日期：2026-06-22</span>
-        <span class="chip">市場類別：Launch Monitor / Golf Simulator</span>
+        <span class="chip">日期：2026-06-22</span>
+        <span class="chip">範圍：品牌 / 產品 / 商業模式</span>
+        <span class="chip">資料來源：官網 + 第三方評測</span>
         <span class="chip">語言：繁體中文</span>
-        <span class="chip">資料來源：官方網站 + 第三方評測</span>
       </div>
     </header>
 
-    <section class="grid cards">
-      <div class="card">
-        <div class="label">品牌核心定位</div>
-        <div class="value">精準 × 內容生態系</div>
-        <p class="small muted">以高精準球/桿數據、AI 訓練與模擬內容綁定，鎖定願意為體驗升級付費的玩家。</p>
-      </div>
-      <div class="card">
-        <div class="label">主力售價帶</div>
-        <div class="value">US$2,499–8,999</div>
-        <p class="small muted">涵蓋便攜式到天花板固定式，跨越中高階到準專業客群。</p>
-      </div>
-      <div class="card">
-        <div class="label">主要變現方式</div>
-        <div class="value">硬體 + 訂閱</div>
-        <p class="small muted">硬體一次性收入搭配 VIEW / AI Trainer / REFINE+ / GameDay 等訂閱與升級包。</p>
-      </div>
-      <div class="card">
-        <div class="label">品牌風格</div>
-        <div class="value">科技感、沉浸式</div>
-        <p class="small muted">官網主打「precision」「innovation」「community」，傳遞高性能與娛樂兼容的形象。</p>
-      </div>
+    <section class="grid kpis">
+      <div class="card"><div class="label">品牌定位</div><div class="value">高階精準訓練 + 模擬生態</div><div class="small">不是單賣硬體，而是賣完整體驗。</div></div>
+      <div class="card"><div class="label">價格帶</div><div class="value">US$2,499–8,999</div><div class="small">覆蓋便攜入門到旗艦工作室。</div></div>
+      <div class="card"><div class="label">營收引擎</div><div class="value">硬體 + 訂閱 + 升級包</div><div class="small">把一次性買賣變成持續變現。</div></div>
+      <div class="card"><div class="label">核心心智</div><div class="value">精準、創新、社群</div><div class="small">官網敘事一致且偏科技感。</div></div>
     </section>
 
     <section class="section">
-      <h2>1. 品牌總覽</h2>
-      <div class="two-col">
+      <h2>1. 執行摘要</h2>
+      <div class="two">
         <div>
-          <p>Uneekor 的官方敘事非常清楚：它不是單純賣 launch monitor，而是把「球員訓練、模擬娛樂、第三方內容、訂閱升級」整合成一套生態系。官網 About 頁面反覆強調 <strong>precision、innovation、community</strong>，而軟體頁則把 <strong>VIEW / REFINE / GameDay / AI Trainer / Launcher</strong> 串成可持續變現的產品組合。</p>
-          <p>從品牌資產看，Uneekor 已經建立出「高階、偏專業、但又不失家用友善」的定位：比起追求最廣泛的大眾入門市場，它更像是瞄準 <strong>認真練球的中高資產玩家</strong>、高端 home simulator 用戶，以及商用球館、教學工作室。</p>
+          <p>Uneekor 的品牌策略很清楚：用 <strong>高精準 launch monitor</strong> 當入口，再用 <strong>軟體、內容與訂閱</strong> 把使用者留在自家生態系。它的產品線從 EYE MINI LITE、EYE MINI，到 EYE XR、EYE XO、EYE XO2，形成完整的升級階梯。</p>
+          <p>從商業角度看，Uneekor 的優勢不是只有「硬體夠強」，而是它把 <strong>訓練、娛樂、第三方相容、會員制</strong> 放在同一個框架內，讓高階高爾夫模擬器變成可持續擴張的服務型生意。</p>
         </div>
-        <div class="note">
-          <strong>一句話結論：</strong><br />
-          Uneekor 的競爭力不是單一硬體規格，而是「高精準數據 + 內容/訂閱綁定 + 多型態產品線」的組合拳。
+        <div class="callout">
+          <strong>顧問結論：</strong><br />
+          Uneekor 是一個「以硬體建立信任、以軟體創造黏著、以訂閱提高 LTV」的高端 golf tech 品牌。
         </div>
       </div>
     </section>
 
     <section class="section">
-      <h2>2. 產品組合與價格帶</h2>
+      <h2>2. 品牌定位與市場角色</h2>
+      <div class="bars">
+        <div class="barrow"><div>精準度</div><div class="bar"><div class="fill blue" style="width:92%"></div></div><div>92</div></div>
+        <div class="barrow"><div>內容生態</div><div class="bar"><div class="fill green" style="width:88%"></div></div><div>88</div></div>
+        <div class="barrow"><div>價格門檻</div><div class="bar"><div class="fill gold" style="width:76%"></div></div><div>76</div></div>
+        <div class="barrow"><div>品牌溢價</div><div class="bar"><div class="fill blue" style="width:84%"></div></div><div>84</div></div>
+      </div>
+      <p style="margin-top:14px">Uneekor 主要吃的是「認真練球」的中高端客群，而不是最便宜的入門市場。它在市場上的角色介於超高端巡迴賽級與大眾入門型之間，屬於<strong>高階家用 / 教學工作室</strong>的甜蜜區。</p>
+    </section>
+
+    <section class="section">
+      <h2>3. 產品矩陣與定價</h2>
       <div class="table-wrap">
         <table>
           <thead>
-            <tr>
-              <th>產品</th>
-              <th>型態 / 特色</th>
-              <th>官方標示價格</th>
-              <th>品牌訊息</th>
-            </tr>
+            <tr><th>產品</th><th>型態</th><th>官方價格</th><th>定位</th><th>一句話</th></tr>
           </thead>
           <tbody>
-            <tr>
-              <td><strong>EYE XO2</strong></td>
-              <td>天花板固定式，3 顆高速攝影機，最大擊球區</td>
-              <td>US$8,999</td>
-              <td><span class="badge b-accent">旗艦旗艦級</span></td>
-            </tr>
-            <tr>
-              <td><strong>EYE XO</strong></td>
-              <td>天花板固定式，雙高速攝影機，偏高階訓練 / 工作室</td>
-              <td>US$5,999</td>
-              <td><span class="badge b-warn">高階主力</span></td>
-            </tr>
-            <tr>
-              <td><strong>EYE XR</strong></td>
-              <td>後置式，紅外精準、強調安裝自由與安全性</td>
-              <td>US$5,499</td>
-              <td><span class="badge b-success">平衡型明星品</span></td>
-            </tr>
-            <tr>
-              <td><strong>EYE MINI</strong></td>
-              <td>便攜式，室內/室外都可用，可搭 iPad / PC</td>
-              <td>US$2,999（Starting at）</td>
-              <td><span class="badge b-accent">高機動性</span></td>
-            </tr>
-            <tr>
-              <td><strong>EYE MINI LITE</strong></td>
-              <td>入門便攜式，主打簡單連接 PC 與較低門檻</td>
-              <td>US$2,499（Starting at）</td>
-              <td><span class="badge b-warn">入門引流</span></td>
-            </tr>
-            <tr>
-              <td><strong>SIMKIT Bundles</strong></td>
-              <td>硬體+模擬器套裝</td>
-              <td>US$3,769 起</td>
-              <td><span class="badge b-success">整套解決方案</span></td>
-            </tr>
+            <tr><td><strong>EYE XO2</strong></td><td>天花板固定式 / 3 高速攝影機</td><td>US$8,999</td><td><span class="pill p-accent">旗艦</span></td><td>最大擊球區與最高規格。</td></tr>
+            <tr><td><strong>EYE XO</strong></td><td>天花板固定式 / 雙高速攝影機</td><td>US$5,999</td><td><span class="pill p-good">高階主力</span></td><td>工作室與高端家庭的平衡點。</td></tr>
+            <tr><td><strong>EYE XR</strong></td><td>後置式 / 紅外精準</td><td>US$5,499</td><td><span class="pill p-good">明星產品</span></td><td>安裝自由度高，最容易被理解。</td></tr>
+            <tr><td><strong>EYE MINI</strong></td><td>便攜式 / 室內外皆可</td><td>US$2,999 起</td><td><span class="pill p-warn">成長型入口</span></td><td>便攜與精準兼顧。</td></tr>
+            <tr><td><strong>EYE MINI LITE</strong></td><td>便攜式 / 簡化入門</td><td>US$2,499 起</td><td><span class="pill p-warn">入門引流</span></td><td>用較低門檻擴大受眾。</td></tr>
           </tbody>
         </table>
       </div>
-      <ul class="list">
-        <li><strong>EYE XO2</strong> 與 <strong>EYE XO</strong> 明顯服務高客單工作室、商用與重度玩家。</li>
-        <li><strong>EYE XR</strong> 是最有品牌辨識度的平衡產品：兼顧高階數據與安裝自由。</li>
-        <li><strong>EYE MINI / MINI LITE</strong> 則負責把品牌往便攜與家庭市場下探，擴大客群入口。</li>
-      </ul>
+      <p class="small" style="margin-top:10px">重點：Uneekor 的產品階梯很完整，能讓用戶從「先買得起」走到「再升級」。</p>
     </section>
 
     <section class="section">
-      <h2>3. 軟體與訂閱模式：Uneekor 的真正護城河</h2>
-      <p>Uneekor 很明顯把軟體當作長期收入與黏著度來源，而不是附屬品。官網目前最重要的軟體/內容模組包含：</p>
-      <ul class="list">
-        <li><strong>VIEW</strong>：即時數據、球路追蹤與訓練分析核心。</li>
-        <li><strong>REFINE / REFINE+</strong>：偏向逼真的球場模擬與遊玩體驗。</li>
-        <li><strong>GameDay</strong>：主打 4K 競賽與娛樂感。</li>
-        <li><strong>AI Trainer (with VIEW)</strong>：即時個人化教練回饋，利用 Swing Score 等機制推進訓練。</li>
-        <li><strong>Uneekor Launcher</strong>：軟體管理中心，統一更新與啟動。</li>
-        <li><strong>Third Party Compatibility</strong>：對外接 GSPro、E6 等生態維持開放性。</li>
-      </ul>
-
-      <div class="table-wrap" style="margin-top:16px;">
-        <table>
-          <thead>
-            <tr>
-              <th>訂閱方案</th>
-              <th>年費 / 費用</th>
-              <th>重點權益</th>
-              <th>商業意義</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>Player</strong></td>
-              <td>US$0（Included）</td>
-              <td>單一 Profile、VIEW、基礎訓練功能</td>
-              <td>降低入門門檻，提升硬體成交率</td>
-            </tr>
-            <tr>
-              <td><strong>Pro</strong></td>
-              <td>US$199 / yr</td>
-              <td>5 Profiles、3rd party software、更多報告</td>
-              <td>把一般玩家往「付費升級」推進</td>
-            </tr>
-            <tr>
-              <td><strong>Champion</strong></td>
-              <td>US$399 / yr</td>
-              <td>50 Profiles、AI Trainer、REFINE+ 進階權益</td>
-              <td>中高階家庭 / 教練 / 工作室使用者</td>
-            </tr>
-            <tr>
-              <td><strong>Ultimate Best</strong></td>
-              <td>US$599 / yr</td>
-              <td>GameDay 完整使用權</td>
-              <td>高娛樂需求與重度模擬玩家</td>
-            </tr>
-          </tbody>
-        </table>
+      <h2>4. 商業模式：硬體只是起點</h2>
+      <div class="two">
+        <div>
+          <p>Uneekor 的軟體與訂閱設計，是整個品牌最關鍵的護城河。官網將 <strong>VIEW</strong>、<strong>REFINE / REFINE+</strong>、<strong>GameDay</strong>、<strong>AI Trainer</strong>、<strong>Launcher</strong> 放在同一個敘事中，表示它不是把軟體當附屬配件，而是核心收入來源之一。</p>
+          <ul>
+            <li><strong>VIEW：</strong>訓練與數據分析核心。</li>
+            <li><strong>REFINE / REFINE+</strong>：偏模擬球場與競技遊玩。</li>
+            <li><strong>GameDay：</strong>娛樂與競賽取向。</li>
+            <li><strong>AI Trainer：</strong>把數據變成即時教練回饋。</li>
+            <li><strong>第三方相容：</strong>保留 GSPro / E6 類平台延伸性。</li>
+          </ul>
+        </div>
+        <div>
+          <div class="table-wrap">
+            <table style="min-width:0">
+              <thead><tr><th>方案</th><th>費用</th><th>權益</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Player</strong></td><td>US$0</td><td>基本訓練、單人檔案</td></tr>
+                <tr><td><strong>Pro</strong></td><td>US$199 / 年</td><td>多檔案、第三方軟體、更多報告</td></tr>
+                <tr><td><strong>Champion</strong></td><td>US$399 / 年</td><td>50 profiles、AI Trainer、REFINE+ 擴充</td></tr>
+                <tr><td><strong>Ultimate Best</strong></td><td>US$599 / 年</td><td>GameDay 完整存取</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="small" style="margin-top:10px">這種分層設計的目的很明確：把高價值用戶逐步導向更高 ARPU。</p>
+        </div>
       </div>
-      <p class="muted small">註：官網不同頁面會依產品與活動顯示不同組合與敘述，實際售價與權益可能隨時間調整。</p>
     </section>
 
     <section class="section">
-      <h2>4. 品牌定位與目標客群</h2>
+      <h2>5. SWOT 分析</h2>
       <div class="swot">
-        <div class="box">
-          <h3>核心客群</h3>
-          <ul class="list">
-            <li>居家高爾夫模擬器玩家：願意為精準度與沉浸感買單。</li>
-            <li>教學工作室 / 球館：重視多帳號、穩定性、第三方相容性。</li>
-            <li>高爾夫愛好者升級族：從便攜型開始，逐步升級到固定式。</li>
-          </ul>
-        </div>
-        <div class="box">
-          <h3>品牌語氣</h3>
-          <ul class="list">
-            <li>偏科技、偏專業。</li>
-            <li>同時兼顧「訓練」與「娛樂」。</li>
-            <li>強調 community 與 joy of play，不只賣機器。</li>
-          </ul>
-        </div>
+        <div class="box"><h3>Strengths｜優勢</h3><ul><li>產品線完整，覆蓋多價格帶</li><li>硬體 + 軟體閉環，黏著度高</li><li>品牌敘事一致，科技感強</li></ul></div>
+        <div class="box"><h3>Weaknesses｜弱點</h3><ul><li>價格仍偏高，對新手有門檻</li><li>訂閱制可能引發反感</li><li>高階市場競品心智很強</li></ul></div>
+        <div class="box"><h3>Opportunities｜機會</h3><ul><li>高爾夫模擬器家用市場持續成長</li><li>AI 教練與數據化訓練需求上升</li><li>內容服務可持續加值</li></ul></div>
+        <div class="box"><h3>Threats｜威脅</h3><ul><li>競品持續降價或推出更高 CP 值產品</li><li>第三方內容平台分走注意力</li><li>安裝與售後體驗直接影響口碑</li></ul></div>
       </div>
     </section>
 
     <section class="section">
-      <h2>5. 競爭優勢分析</h2>
-      <ul class="list">
-        <li><strong>產品線完整：</strong>從 MINI LITE 到 XO2，幾乎覆蓋所有主流預算層級。</li>
-        <li><strong>數據與內容綁定：</strong>硬體、VIEW、AI Trainer、GameDay、REFINE 形成閉環。</li>
-        <li><strong>安裝選擇多：</strong>便攜、後置、天花板固定式都有，能配合不同空間。</li>
-        <li><strong>第三方相容：</strong>不把用戶鎖死，保留 GSPro / E6 等外部內容的延伸性。</li>
-        <li><strong>商業模型成熟：</strong>一次性硬體收入外，訂閱與升級包能持續變現。</li>
-      </ul>
-    </section>
-
-    <section class="section">
-      <h2>6. 主要風險與短板</h2>
-      <div class="swot">
-        <div class="box">
-          <h3>優勢</h3>
-          <ul class="list">
-            <li>高精準感知與多攝影機架構</li>
-            <li>產品與軟體一體化</li>
-            <li>高端形象清楚，容易建立品牌溢價</li>
-          </ul>
-        </div>
-        <div class="box">
-          <h3>劣勢 / 風險</h3>
-          <ul class="list">
-            <li>價格偏高，對新手與價格敏感客群門檻大</li>
-            <li>訂閱制可能讓部分使用者感到「買了還要付費」</li>
-            <li>與 Foresight、TrackMan 等頂級品牌比較時，心智仍要爭奪</li>
-          </ul>
-        </div>
-        <div class="box">
-          <h3>機會</h3>
-          <ul class="list">
-            <li>高爾夫模擬器家用市場持續擴張</li>
-            <li>AI 訓練與數據化教學需求上升</li>
-            <li>內容訂閱可持續深化 ARPU</li>
-          </ul>
-        </div>
-        <div class="box">
-          <h3>威脅</h3>
-          <ul class="list">
-            <li>競品持續降價或推出更高性價比產品</li>
-            <li>第三方平台內容生態搶走部分使用時間</li>
-            <li>高階硬體市場本身就容易被口碑與安裝體驗影響</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <h2>7. 與競品的相對位置</h2>
+      <h2>6. 競爭位置判讀</h2>
       <div class="table-wrap">
         <table>
-          <thead>
-            <tr>
-              <th>品牌</th>
-              <th>常見認知</th>
-              <th>與 Uneekor 的差異</th>
-            </tr>
-          </thead>
+          <thead><tr><th>競品</th><th>市場印象</th><th>與 Uneekor 的差異</th></tr></thead>
           <tbody>
-            <tr>
-              <td><strong>TrackMan</strong></td>
-              <td>專業巡迴賽級、雷達測量心智最強</td>
-              <td>TrackMan 偏「絕對標竿」，Uneekor 偏「高階家用/工作室的可及性」</td>
-            </tr>
-            <tr>
-              <td><strong>Foresight Sports</strong></td>
-              <td>GCQuad / GC3 系列在資料精度與品牌力很強</td>
-              <td>Uneekor 在價格與軟體綁定上更具組合彈性</td>
-            </tr>
-            <tr>
-              <td><strong>SkyTrak / Rapsodo 類</strong></td>
-              <td>更親民、入門導向</td>
-              <td>Uneekor 明顯高一階，主打更完整的專業體驗</td>
-            </tr>
+            <tr><td><strong>TrackMan</strong></td><td>巡迴賽級標竿</td><td>TrackMan 是天花板，Uneekor 是可負擔的高階方案。</td></tr>
+            <tr><td><strong>Foresight</strong></td><td>精準與品牌力強</td><td>Uneekor 在軟體整合與價格階梯上更彈性。</td></tr>
+            <tr><td><strong>SkyTrak / Rapsodo</strong></td><td>較偏入門與普及</td><td>Uneekor 更高一階，走進階玩家與工作室市場。</td></tr>
           </tbody>
         </table>
       </div>
-      <p>第三方評測普遍把 Uneekor 的高階產品視為「高準度、強功能」的選擇，其中 EYE MINI 被評為接近更昂貴機種的精準度，而 EYE XR / QED 系列則常被拿來和高階競品比較。這也反映出 Uneekor 在市場上的位置：<strong>不是最低價，而是把高階功能做成可購買、可擴充、可升級</strong>。</p>
+      <p>第三方評測普遍認為 Uneekor 的高階機種在準確度與使用體驗上很有競爭力，尤其是 <strong>EYE MINI / EYE XR / QED</strong> 類產品，常被放進與更昂貴機器的比較框架中。</p>
     </section>
 
     <section class="section">
-      <h2>8. 策略建議</h2>
-      <ol class="list">
-        <li><strong>持續強化軟體價值：</strong>讓訂閱能明確提供「可感知」的教學與娛樂差異，而不只是解鎖功能。</li>
-        <li><strong>把 MINI / MINI LITE 當成品牌入口：</strong>用較低門檻帶進來，再透過升級包與生態系提高 LTV。</li>
-        <li><strong>強化安裝與售後體驗：</strong>高階硬體的口碑常取決於安裝成功率、設定便利性與支援品質。</li>
-        <li><strong>建立更清楚的分層訊息：</strong>讓消費者一眼理解 XO2 / XO / XR / MINI / MINI LITE 的差異與升級路徑。</li>
-        <li><strong>對外傳達「不是硬體孤島」：</strong>強調與第三方平台相容，避免被視為封閉系統。</li>
+      <h2>7. 策略建議</h2>
+      <ol>
+        <li><strong>把軟體價值說得更直白：</strong>讓消費者一眼看懂訂閱升級到底多了什麼。</li>
+        <li><strong>以 MINI / MINI LITE 當入口：</strong>先拉新，再透過升級包與內容做變現。</li>
+        <li><strong>提升安裝與售後體驗：</strong>高單價商品的口碑高度依賴落地服務。</li>
+        <li><strong>把第三方相容性當賣點：</strong>避免被視為封閉系統。</li>
+        <li><strong>分層訊息再清楚一點：</strong>幫消費者快速判斷 XO2、XO、XR、MINI 的差異。</li>
       </ol>
     </section>
 
     <section class="section">
-      <h2>9. 結論</h2>
-      <p>Uneekor 的品牌本質，是把高爾夫 launch monitor 從「單一測量工具」升級為「數據訓練 + 模擬內容 + 訂閱服務」的整體體驗。它的優勢在於產品線完整、功能層次清楚、價格帶覆蓋廣，並且成功建立出一個兼具專業與娛樂的品牌敘事。</p>
-      <p>如果你問 Uneekor 適合誰：答案不是所有人，而是那些願意為 <strong>更精準的數據、更完整的軟體、更像真實高爾夫的體驗</strong> 付費的使用者。從品牌經營角度來看，這是個已經具備明確定位、且仍有成長空間的高階 golf tech 品牌。</p>
+      <h2>8. 結論</h2>
+      <p>Uneekor 最強的地方，不是單一產品，而是它已經把「硬體、軟體、內容、訂閱」串成一套完整商業模型。對使用者來說，它代表的是更完整的高爾夫模擬體驗；對品牌來說，它代表的是更長的變現鏈與更高的客戶終身價值。</p>
+      <p>若用一句話總結：<strong>Uneekor 是一個成功把 launch monitor 做成平台型生意的品牌。</strong></p>
     </section>
 
     <section class="section">
       <h2>資料來源</h2>
-      <ul class="list">
-        <li><a href="https://uneekor.com/about" target="_blank" rel="noopener noreferrer">Uneekor About 頁</a></li>
-        <li><a href="https://uneekor.com/collections/launch-monitors" target="_blank" rel="noopener noreferrer">Uneekor Launch Monitors 產品頁</a></li>
-        <li><a href="https://uneekor.com/golf-simulator-software" target="_blank" rel="noopener noreferrer">Uneekor Software 頁</a></li>
-        <li><a href="https://uneekor.com/golf-launch-monitors/eye-xo2" target="_blank" rel="noopener noreferrer">EYE XO2 產品頁</a></li>
-        <li><a href="https://uneekor.com/golf-launch-monitors/eye-xo" target="_blank" rel="noopener noreferrer">EYE XO 產品頁</a></li>
-        <li><a href="https://uneekor.com/golf-launch-monitors/eye-xr" target="_blank" rel="noopener noreferrer">EYE XR 產品頁</a></li>
-        <li><a href="https://uneekor.com/golf-launch-monitors/eye-mini" target="_blank" rel="noopener noreferrer">EYE MINI 產品頁</a></li>
-        <li><a href="https://uneekor.com/golf-launch-monitors/eye-mini-lite" target="_blank" rel="noopener noreferrer">EYE MINI LITE 產品頁</a></li>
-        <li><a href="https://pluggedingolf.com/uneekor-eye-mini-launch-monitor-review/" target="_blank" rel="noopener noreferrer">Plugged In Golf：EYE MINI 評測</a></li>
-        <li><a href="https://golfsimulatoradvisor.com/uneekor-eye-xr-launch-monitor-review/" target="_blank" rel="noopener noreferrer">Golf Simulator Advisor：EYE XR 評測</a></li>
-        <li><a href="https://golfsimulatoradvisor.com/uneekor-qed-launch-monitor-review/" target="_blank" rel="noopener noreferrer">Golf Simulator Advisor：QED 評測</a></li>
+      <ul>
+        <li>Uneekor About、Launch Monitors、Software、產品頁</li>
+        <li>Plugged In Golf：EYE MINI Review</li>
+        <li>Golf Simulator Advisor：EYE XR / QED Review</li>
       </ul>
-      <p class="muted small">註：價格與方案內容以官網當前頁面為準；本報告為品牌分析用途，非投資或採購唯一依據。</p>
+      <div class="footer-note">註：價格與方案內容會隨官網更新而變動，實際採購請以官方頁面為準。</div>
     </section>
 
     <footer>Generated by Hermes Agent</footer>
